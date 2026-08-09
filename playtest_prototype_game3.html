@@ -594,13 +594,22 @@
 
   <!-- Map Modal -->
   <div class="modal-overlay" id="mapModal">
-    <div class="modal-card">
+    <div class="modal-card" style="max-width: 720px; text-align: center;">
       <div class="modal-header">
-        <h3>Spatial Node Network & Fast Travel</h3>
-        <button class="btn" id="btnCloseMap">✕ Close</button>
+        <h3>🗺️ Blackwood High Diegetic Floor Map</h3>
+        <button class="btn" id="btnCloseMap">✕ Close Map</button>
       </div>
-      <div class="modal-body">
-        <div class="map-nodes-grid" id="mapGrid"></div>
+      <div class="modal-body" style="display: flex; flex-direction: column; align-items: center;">
+        <div id="mapNotFoundNotice" style="display:none; padding: 24px; background: rgba(255, 77, 77, 0.15); border: 1px dashed var(--accent-red); border-radius: 8px; color: var(--accent-red); font-size: 0.95rem; margin: 20px 0;">
+          🗺️ <strong>Layout Map Not Found!</strong><br>
+          <span style="font-size:0.82rem; color:var(--text-muted); margin-top:6px; display:inline-block;">You have not picked up the School Layout Map yet. Inspect and loot the School Layout Map from the Main Vestibule Kiosk Desk first!</span>
+        </div>
+        <canvas id="mapCanvas" width="660" height="480" style="background: #080c14; border: 1px solid var(--border-color); border-radius: 8px; max-width: 100%; height: auto; margin-bottom: 12px;"></canvas>
+        <div id="mapLegend" style="display:flex; gap:18px; font-size:0.78rem; color:var(--text-muted); justify-content:center; flex-wrap:wrap;">
+          <div><span style="display:inline-block; width:14px; height:6px; background:#ff4d4d; margin-right:4px; vertical-align:middle; border-radius:2px;"></span> 🔴 Red Line: Locked Door</div>
+          <div><span style="display:inline-block; width:14px; height:6px; background:#2ec4b6; margin-right:4px; vertical-align:middle; border-radius:2px;"></span> 🟢 Green Line: Unlocked Door</div>
+          <div><span style="display:inline-block; width:12px; height:12px; background:rgba(255,183,3,0.5); border:1.5px solid #ffb703; margin-right:4px; vertical-align:middle; border-radius:2px;"></span> 🟡 Yellow: Current Position</div>
+        </div>
       </div>
     </div>
   </div>
@@ -871,6 +880,9 @@
       playerHp: 100,
       maxPlayerHp: 100,
       selectedSlotIndex: null,
+      
+      // Map State
+      hasMapPickedUp: false,
       
       // Swapping State
       isSwapping: false,
@@ -1345,6 +1357,13 @@
     // --- ITEM PICKUP & 5-SLOT SWAPPING ENGINE ---
     function attemptPickupItem(item, sourceHotspotId, sourceName) {
       if (state.playerHp <= 0) return;
+      
+      // Track Layout Map Pickup
+      if (item.item_id === 'ITEM_LAYOUT_MAP' || item.item_id === 'item_layout_map' || item.item_id === 'item_map' || item.item_id.includes('map')) {
+        state.hasMapPickedUp = true;
+        addLog(`🗺️ Picked up School Layout Map! Tactical 2D Floor Map unlocked in Map Overlay!`, 'success');
+      }
+
       // Check if stackable existing item
       const existing = state.inventory.find(i => i.item_id === item.item_id);
       if (existing) {
@@ -1625,10 +1644,10 @@
       document.getElementById('gameOverModal').classList.add('active');
     }
 
-    // --- MAP OVERLAY ---
+    // --- DIEGETIC 2D CANVAS FLOOR MAP ---
     document.getElementById('btnMap').addEventListener('click', () => {
       playSound('click');
-      renderMapNodes();
+      render2DFloorMap();
       document.getElementById('mapModal').classList.add('active');
     });
 
@@ -1646,31 +1665,105 @@
       document.getElementById('npcModal').classList.remove('active');
     });
 
-    function renderMapNodes() {
-      const grid = document.getElementById('mapGrid');
-      grid.innerHTML = '';
+    function render2DFloorMap() {
+      const mapCanvas = document.getElementById('mapCanvas');
+      if (!mapCanvas) return;
+      const ctx = mapCanvas.getContext('2d');
+      ctx.clearRect(0, 0, mapCanvas.width, mapCanvas.height);
 
+      const hasMap = state.hasMapPickedUp || state.inventory.some(i => i.item_id === 'ITEM_LAYOUT_MAP' || i.item_id === 'item_layout_map' || i.item_id === 'item_map' || i.item_id.includes('map'));
+
+      if (!hasMap) {
+        document.getElementById('mapNotFoundNotice').style.display = 'block';
+        mapCanvas.style.display = 'none';
+        document.getElementById('mapLegend').style.display = 'none';
+        return;
+      }
+
+      document.getElementById('mapNotFoundNotice').style.display = 'none';
+      mapCanvas.style.display = 'block';
+      document.getElementById('mapLegend').style.display = 'flex';
+
+      const scale = 5.2;
+      const offsetX = mapCanvas.width / 2;
+      const offsetY = mapCanvas.height - 60;
+
+      function worldToMap(wx, wy) {
+        return {
+          x: offsetX + wx * scale,
+          y: offsetY - wy * scale
+        };
+      }
+
+      // 1. DRAW DOORS AS THICK COLOR-CODED LINES (RED = LOCKED, GREEN = UNLOCKED)
       Object.values(GAME_DATA.rooms).forEach(room => {
-        const card = document.createElement('div');
-        const isCurrent = room.room_id === state.currentRoomId;
+        const rPos = room.center_position || { x: 0, y: 0 };
+        const rPosMap = worldToMap(rPos.x, rPos.y);
+
+        (room.hotspots || []).filter(h => h.type === 'door').forEach(hs => {
+          const targetRoom = GAME_DATA.rooms[hs.target_room];
+          if (targetRoom) {
+            const tPos = targetRoom.center_position || { x: 0, y: 0 };
+            const tPosMap = worldToMap(tPos.x, tPos.y);
+
+            const isUnlocked = !hs.required_key || state.unlockedDoors.has(hs.id);
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(rPosMap.x, rPosMap.y);
+            ctx.lineTo(tPosMap.x, tPosMap.y);
+            ctx.lineWidth = 6; // Thick line!
+            ctx.strokeStyle = isUnlocked ? '#2ec4b6' : '#ff4d4d'; // Green if unlocked, Red if locked!
+            ctx.stroke();
+            ctx.restore();
+          }
+        });
+      });
+
+      // 2. DRAW ROOM BOUNDING BOXES
+      Object.values(GAME_DATA.rooms).forEach(room => {
+        const center = room.center_position || { x: 0, y: 0 };
+        const dim = room.dimensions || { width_x: 6, length_y: 6 };
+        const isCurrent = (room.room_id === state.currentRoomId);
         const isDiscovered = state.visitedRooms.has(room.room_id);
 
-        card.className = `map-node-card ${isCurrent ? 'current' : ''} ${!isDiscovered ? 'locked' : ''}`;
-        card.innerHTML = `
-          <div style="font-weight:700; font-size:0.88rem; margin-bottom:4px; color:#fff;">${room.room_name}</div>
-          <div style="font-size:0.73rem; color:var(--text-muted);">ID: ${room.room_id}</div>
-          <div style="font-size:0.73rem; color:var(--accent-gold); margin-top:4px;">Progression Step ${room.progression_step}</div>
-        `;
+        const w = dim.width_x * scale;
+        const h = dim.length_y * scale;
+        const pos = worldToMap(center.x, center.y);
+        const rx = pos.x - w / 2;
+        const ry = pos.y - h / 2;
 
-        if (isDiscovered && !isCurrent) {
-          card.addEventListener('click', () => {
-            if (state.playerHp <= 0) return;
-            playSound('door');
-            changeRoom(room.room_id);
-            document.getElementById('mapModal').classList.remove('active');
-          });
+        ctx.save();
+        ctx.fillStyle = isCurrent 
+          ? 'rgba(255, 183, 3, 0.45)' 
+          : (isDiscovered ? 'rgba(58, 134, 255, 0.25)' : 'rgba(15, 23, 42, 0.6)');
+
+        ctx.strokeStyle = isCurrent 
+          ? '#ffb703' 
+          : (isDiscovered ? '#3a86ff' : '#475569');
+
+        ctx.lineWidth = isCurrent ? 3 : 1.5;
+        if (!isDiscovered) ctx.setLineDash([4, 4]);
+
+        ctx.beginPath();
+        ctx.roundRect(rx, ry, w, h, 6);
+        ctx.fill();
+        ctx.stroke();
+
+        // Room label
+        if (isDiscovered) {
+          ctx.fillStyle = isCurrent ? '#ffffff' : '#e2e8f0';
+          ctx.font = isCurrent ? 'bold 11px sans-serif' : '10px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(room.room_name.split(' (')[0], pos.x, pos.y + 3);
+        } else {
+          ctx.fillStyle = '#64748b';
+          ctx.font = '10px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('🔒 Uncharted', pos.x, pos.y + 3);
         }
-        grid.appendChild(card);
+
+        ctx.restore();
       });
     }
 
