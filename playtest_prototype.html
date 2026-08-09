@@ -864,6 +864,8 @@
       inventory: [], // Max 5 items
       visitedRooms: new Set(["RM_01_ALLEYWAY"]),
       lootedHotspots: new Set(),
+      unlockedDoors: new Set(),
+      equippedWeaponId: null,
       neutralizedEnemies: new Set(),
       generatorActive: false,
       playerHp: 100,
@@ -1149,10 +1151,18 @@
 
     function attackEnemy(enemy) {
       if (state.playerHp <= 0) return;
-      const weapon = state.inventory.find(i => i.item_id.startsWith('weapon_'));
-      if (!weapon) {
+
+      if (!state.equippedWeaponId) {
         playSound('locked');
-        addLog(`No weapon equipped in inventory! Search containers for a handgun or shotgun!`, 'warning');
+        addLog(`⚠️ No weapon equipped! Inspect a weapon in your 5-slot inventory and click 'Equip Weapon' first!`, 'warning');
+        return;
+      }
+
+      const weapon = state.inventory.find(i => i.item_id === state.equippedWeaponId);
+      if (!weapon) {
+        state.equippedWeaponId = null;
+        playSound('locked');
+        addLog(`⚠️ Equipped weapon no longer in inventory! Inspect and equip a weapon from your inventory!`, 'warning');
         return;
       }
 
@@ -1301,14 +1311,15 @@
       }
 
       if (hs.type === 'door') {
-        if (hs.required_key) {
+        if (hs.required_key && !state.unlockedDoors.has(hs.id)) {
           const hasKey = state.inventory.some(i => i.item_id === hs.required_key);
           if (!hasKey) {
             playSound('locked');
-            addLog(`Door Locked! Access to ${hs.name} requires key item: [${hs.required_key}]!`, 'warning');
+            addLog(`🔒 Door Locked! Access to [${hs.name}] requires key item: [${hs.required_key}]. Inspect key in inventory to use target selector!`, 'warning');
             return;
           }
-          addLog(`Unlocked ${hs.name} using [${hs.required_key}]!`, 'success');
+          state.unlockedDoors.add(hs.id);
+          addLog(`🔓 Unlocked [${hs.name}] using key item! Door remains permanently unlocked.`, 'success');
         }
 
         playSound('door');
@@ -1345,7 +1356,7 @@
         existing.quantity += item.quantity;
         state.lootedHotspots.add(sourceHotspotId);
         playSound('pickup');
-        addLog(`Added ${item.quantity}x ${item.name} to existing stack!`, 'pickup');
+        addLog(`Added ${item.quantity}x [${item.icon || '📦'} ${item.name}] to existing stack!`, 'pickup');
         updateInventoryUI();
         return;
       }
@@ -1355,17 +1366,17 @@
         state.inventory.push({ ...item });
         state.lootedHotspots.add(sourceHotspotId);
         playSound('pickup');
-        addLog(`Looted ${item.name} into 5-slot inventory!`, 'pickup');
+        addLog(`Looted [${item.icon || '📦'} ${item.name}] into 5-slot inventory!`, 'pickup');
         updateInventoryUI();
       } else {
         // INVENTORY FULL: Enter Swapping Mode!
         state.isSwapping = true;
         state.pendingItem = { ...item, sourceHotspotId, sourceName };
         document.body.classList.add('swapping-active');
-        document.getElementById('pendingItemName').textContent = item.name;
+        document.getElementById('pendingItemName').textContent = `${item.icon || '📦'} ${item.name}`;
         document.getElementById('swappingBanner').style.display = 'flex';
         playSound('locked');
-        addLog(`🖐️ Inventory full (5/5)! Cursor changed to Hand Icon. Select an item in inventory to SWAP with [${item.name}] or click Cancel.`, 'warning');
+        addLog(`🖐️ Inventory full (5/5)! Cursor changed to Hand Icon. Select an item in inventory to SWAP with [${item.icon || '📦'} ${item.name}] or click Cancel.`, 'warning');
         updateInventoryUI();
       }
     }
@@ -1406,7 +1417,7 @@
       }
 
       playSound('pickup');
-      addLog(`🔄 Swapped [${oldItem.name}] with [${newItem.name}]! [${oldItem.name}] was placed back into ${newItem.sourceName || 'container'}!`, 'success');
+      addLog(`🔄 Swapped [${oldItem.icon || '📦'} ${oldItem.name}] with [${newItem.icon || '📦'} ${newItem.name}]! [${oldItem.icon || '📦'} ${oldItem.name}] was placed back into ${newItem.sourceName || 'container'}!`, 'success');
 
       cancelItemSwapping();
       updateInventoryUI();
@@ -1432,12 +1443,13 @@
       for (let i = 0; i < MAX_INVENTORY_SLOTS; i++) {
         const item = state.inventory[i];
         const slot = document.createElement('div');
-        slot.className = `inventory-slot ${state.selectedSlotIndex === i ? 'selected' : ''} ${state.isSwapping ? 'swap-target' : ''}`;
+        const isEquipped = item && state.equippedWeaponId === item.item_id;
+        slot.className = `inventory-slot ${state.selectedSlotIndex === i ? 'selected' : ''} ${state.isSwapping ? 'swap-target' : ''} ${isEquipped ? 'equipped' : ''}`;
 
         if (item) {
           slot.innerHTML = `
             <div class="item-icon">${item.icon || '📦'}</div>
-            <div class="item-name">${item.name}</div>
+            <div class="item-name">${isEquipped ? '🗡️ ' : ''}${item.name}</div>
             <div class="item-qty">x${item.quantity}</div>
           `;
         } else {
@@ -1481,12 +1493,12 @@
         <p>Qty: <strong>${item.quantity}</strong> | ID: <code>${item.item_id}</code></p>
       `;
 
-      // Use medical item if applicable
+      // Medical items
       if (item.item_id.startsWith('herb_') || item.item_id === 'bandages' || item.item_id === 'healing_first_aid_spray' || item.item_id === 'item_anti_virus_serum') {
         const btnUse = document.createElement('button');
         btnUse.className = 'btn';
-        btnUse.style.cssText = 'margin-top:6px; font-size:0.75rem; padding:2px 8px; background:var(--accent-green); color:#fff;';
-        btnUse.textContent = '💊 Consume / Heal';
+        btnUse.style.cssText = 'margin-top:6px; font-size:0.75rem; padding:3px 10px; background:var(--accent-green); color:#fff; font-weight:bold;';
+        btnUse.textContent = '💊 Consume / Heal (+40 HP)';
         btnUse.addEventListener('click', () => {
           if (state.playerHp <= 0) return;
           state.playerHp = Math.min(state.maxPlayerHp, state.playerHp + 40);
@@ -1495,12 +1507,95 @@
             state.inventory = state.inventory.filter(i => i !== item);
           }
           playSound('pickup');
-          addLog(`Used ${item.name}! Player HP restored to ${state.playerHp}/${state.maxPlayerHp}.`, 'success');
+          addLog(`Used [${item.icon || ''} ${item.name}]! Player HP restored to ${state.playerHp}/${state.maxPlayerHp}.`, 'success');
           updateInventoryUI();
           renderRoom();
         });
         panel.appendChild(btnUse);
+        return;
       }
+
+      // Weapons: Equip Button!
+      if (item.item_id.startsWith('weapon_')) {
+        const isEquipped = (state.equippedWeaponId === item.item_id);
+        const btnEquip = document.createElement('button');
+        btnEquip.className = 'btn';
+        btnEquip.style.cssText = `margin-top:6px; font-size:0.75rem; padding:4px 12px; background:${isEquipped ? 'var(--accent-gold)' : 'var(--accent-blue)'}; color:${isEquipped ? '#000' : '#fff'}; font-weight:bold;`;
+        btnEquip.textContent = isEquipped ? '✅ Weapon Currently Equipped' : '🗡️ Equip Weapon';
+        btnEquip.addEventListener('click', () => {
+          if (state.playerHp <= 0) return;
+          state.equippedWeaponId = item.item_id;
+          playSound('pickup');
+          addLog(`🗡️ Equipped [${item.icon || ''} ${item.name}] as active combat weapon!`, 'success');
+          updateInventoryUI();
+          showItemInspect(item);
+        });
+        panel.appendChild(btnEquip);
+        return;
+      }
+
+      // Key Items & Tools: Target Dropdown Selector!
+      const room = GAME_DATA.rooms[state.currentRoomId];
+      const visibleHotspots = room ? room.hotspots.filter(hs => hs.camIndex === state.currentCamIndex) : [];
+
+      const targetDiv = document.createElement('div');
+      targetDiv.style.cssText = 'margin-top:10px; display:flex; flex-direction:column; gap:6px; align-items:flex-start;';
+
+      const label = document.createElement('label');
+      label.style.cssText = 'font-size:0.75rem; color:var(--accent-gold); font-weight:bold;';
+      label.textContent = '🎯 Target Object in Active View:';
+
+      const select = document.createElement('select');
+      select.style.cssText = 'width:100%; padding:5px 8px; background:#0d131f; border:1px solid var(--border-color); color:#fff; border-radius:4px; font-size:0.78rem; font-family:inherit;';
+
+      if (visibleHotspots.length === 0) {
+        const opt = document.createElement('option');
+        opt.textContent = '(No targets in active view)';
+        select.appendChild(opt);
+      } else {
+        visibleHotspots.forEach(hs => {
+          const opt = document.createElement('option');
+          opt.value = hs.id;
+          opt.textContent = `${hs.icon || '📌'} ${hs.name} (${hs.type})`;
+          select.appendChild(opt);
+        });
+      }
+
+      const btnUseTarget = document.createElement('button');
+      btnUseTarget.className = 'btn';
+      btnUseTarget.style.cssText = 'padding:5px 12px; font-size:0.78rem; background:var(--accent-blue); color:#fff; font-weight:bold; width:100%; margin-top:2px;';
+      btnUseTarget.textContent = `🔑 Use [${item.icon || ''} ${item.name}] on Target`;
+
+      btnUseTarget.addEventListener('click', () => {
+        if (state.playerHp <= 0) return;
+        const targetId = select.value;
+        const targetHs = visibleHotspots.find(h => h.id === targetId);
+        if (!targetHs) return;
+
+        // Check if item matches target requirement!
+        if (targetHs.required_key === item.item_id) {
+          state.unlockedDoors.add(targetHs.id);
+          playSound('pickup');
+          addLog(`🔓 SUCCESS: Used [${item.icon || ''} ${item.name}] on [${targetHs.name}]! Target permanently unlocked!`, 'success');
+          
+          if (!item.item_id.includes('master')) {
+            item.quantity--;
+            if (item.quantity <= 0) {
+              state.inventory = state.inventory.filter(i => i !== item);
+            }
+          }
+          updateInventoryUI();
+          renderRoom();
+        } else {
+          playSound('locked');
+          addLog(`❌ FAILED: Cannot use [${item.icon || ''} ${item.name}] on [${targetHs.name}]. It has no effect!`, 'danger');
+        }
+      });
+
+      targetDiv.appendChild(label);
+      targetDiv.appendChild(select);
+      targetDiv.appendChild(btnUseTarget);
+      panel.appendChild(targetDiv);
     }
 
     // --- ROOM NAVIGATION ---
@@ -1591,6 +1686,8 @@
       state.inventory = [];
       state.visitedRooms = new Set(["RM_01_ALLEYWAY"]);
       state.lootedHotspots.clear();
+      state.unlockedDoors.clear();
+      state.equippedWeaponId = null;
       state.neutralizedEnemies.clear();
       state.generatorActive = false;
       state.playerHp = 100;
