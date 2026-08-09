@@ -1586,8 +1586,8 @@
         const targetHs = visibleHotspots.find(h => h.id === targetId);
         if (!targetHs) return;
 
-        // Check if item matches target requirement!
-        if (targetHs.required_key === item.item_id) {
+        // Check if item matches target requirement (case-insensitive)!
+        if (targetHs.required_key && item.item_id && targetHs.required_key.toUpperCase() === item.item_id.toUpperCase()) {
           state.unlockedDoors.add(targetHs.id);
           playSound('pickup');
           addLog(`🔓 SUCCESS: Used [${item.icon || ''} ${item.name}] on [${targetHs.name}]! Target permanently unlocked!`, 'success');

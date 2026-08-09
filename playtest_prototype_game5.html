@@ -888,7 +888,7 @@
                 "id": "ITEM_LAYOUT_MAP",
                 "type": "item",
                 "name": "ITEM_LAYOUT_MAP",
-                "item_id": "item_layout_map",
+                "item_id": "ITEM_LAYOUT_MAP",
                 "quantity": 1,
                 "icon": "\ud83d\udce6",
                 "x": 320,
@@ -1043,10 +1043,10 @@
                 "camIndex": 0,
                 "id": "ITEM_FUSE",
                 "type": "item",
-                "name": "ITEM_FUSE",
-                "item_id": "item_fuse",
+                "name": "Electrical Fuse",
+                "item_id": "ITEM_FUSE",
                 "quantity": 1,
-                "icon": "\ud83d\udce6",
+                "icon": "\u26a1",
                 "x": 400,
                 "y": 280,
                 "w": 80,
@@ -1347,10 +1347,10 @@
                 "camIndex": 0,
                 "id": "ITEM_CHEMICAL_AGENT",
                 "type": "item",
-                "name": "ITEM_CHEMICAL_AGENT",
-                "item_id": "item_chemical_agent",
+                "name": "Bio-Growth Dissolvent Compound",
+                "item_id": "ITEM_CHEMICAL_AGENT",
                 "quantity": 1,
-                "icon": "\ud83d\udce6",
+                "icon": "\ud83e\uddea",
                 "x": 320,
                 "y": 280,
                 "w": 80,
@@ -1471,7 +1471,7 @@
                 "id": "ITEM_GREEN_HERB",
                 "type": "item",
                 "name": "ITEM_GREEN_HERB",
-                "item_id": "item_green_herb",
+                "item_id": "ITEM_GREEN_HERB",
                 "quantity": 1,
                 "icon": "\ud83d\udce6",
                 "x": 320,
@@ -1581,10 +1581,10 @@
                 "camIndex": 0,
                 "id": "ITEM_MASTER_KEYCARD",
                 "type": "item",
-                "name": "ITEM_MASTER_KEYCARD",
-                "item_id": "item_master_keycard",
+                "name": "Master Security Keycard",
+                "item_id": "ITEM_MASTER_KEYCARD",
                 "quantity": 1,
-                "icon": "\ud83d\udce6",
+                "icon": "\ud83d\udcb3",
                 "x": 400,
                 "y": 280,
                 "w": 80,
@@ -2661,8 +2661,8 @@
         const targetHs = visibleHotspots.find(h => h.id === targetId);
         if (!targetHs) return;
 
-        // Check if item matches target requirement!
-        if (targetHs.required_key === item.item_id) {
+        // Check if item matches target requirement (case-insensitive)!
+        if (targetHs.required_key && item.item_id && targetHs.required_key.toUpperCase() === item.item_id.toUpperCase()) {
           state.unlockedDoors.add(targetHs.id);
           playSound('pickup');
           addLog(`🔓 SUCCESS: Used [${item.icon || ''} ${item.name}] on [${targetHs.name}]! Target permanently unlocked!`, 'success');
