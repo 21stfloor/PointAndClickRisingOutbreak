@@ -1335,6 +1335,7 @@
       const oldItem = state.inventory[slotIndex];
       const newItem = state.pendingItem;
 
+      // 1. Put newItem into selected inventory slot
       state.inventory[slotIndex] = {
         item_id: newItem.item_id,
         name: newItem.name,
@@ -1342,12 +1343,30 @@
         icon: newItem.icon
       };
 
+      // 2. Container/World Exchange: Place oldItem back into source container or item hotspot!
       if (newItem.sourceHotspotId) {
-        state.lootedHotspots.add(newItem.sourceHotspotId);
+        let foundHs = null;
+        for (let r of Object.values(GAME_DATA.rooms)) {
+          foundHs = r.hotspots.find(h => h.id === newItem.sourceHotspotId);
+          if (foundHs) break;
+        }
+
+        if (foundHs) {
+          if (foundHs.type === 'container') {
+            foundHs.items = [{ ...oldItem }];
+            state.lootedHotspots.delete(newItem.sourceHotspotId); // Reset looted status so oldItem can be inspected/looted!
+          } else if (foundHs.type === 'item') {
+            foundHs.item_id = oldItem.item_id;
+            foundHs.name = oldItem.name;
+            foundHs.quantity = oldItem.quantity;
+            foundHs.icon = oldItem.icon || '📦';
+            state.lootedHotspots.delete(newItem.sourceHotspotId); // Reset looted status so oldItem is visible/pickable!
+          }
+        }
       }
 
       playSound('pickup');
-      addLog(`🔄 Swapped [${oldItem.name}] with [${newItem.name}] in 5-slot inventory!`, 'success');
+      addLog(`🔄 Swapped [${oldItem.name}] with [${newItem.name}]! [${oldItem.name}] was placed back into ${newItem.sourceName || 'container'}!`, 'success');
 
       cancelItemSwapping();
       updateInventoryUI();

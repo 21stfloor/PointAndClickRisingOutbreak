@@ -1,7 +1,7 @@
 ---
 name: point-and-click-prototype
 description: >-
-  Generates a standalone, zero-dependency, single-file HTML5/JavaScript interactive point-and-click browser game from completed concept art images, story.json, and threat configurations for rapid playtesting of camera-dependent hotspot visibility, 5-slot inventory item swapping, animated zombie threat scaling (zombie_transparent.png / zombie_attack_transparent.png), safe room NPC interactions, and room navigation pacing.
+  Generates a standalone, zero-dependency, single-file HTML5/JavaScript interactive point-and-click browser game from completed concept art images, story.json, and threat configurations for rapid playtesting of camera-dependent hotspot visibility, 5-slot inventory item swapping (with swapped items returning to containers/hotspots), animated zombie threat scaling (zombie_transparent.png / zombie_attack_transparent.png), safe room NPC interactions, and room navigation pacing.
 ---
 
 # SKILL: Generate Playable Point-and-Click Prototype (with Camera-Gated Hotspots & Threat Combat)
@@ -22,15 +22,16 @@ Generates a complete, zero-dependency, single-file HTML5/JavaScript interactive 
 - **Camera-Specific Interactables:** Every clickable hotspot (door, item, container, console) MUST be bound to a specific `camera_id` or active view angle.
 - Hotspots are rendered and interactive ONLY when the player has selected and is actively viewing that specific camera perspective. This forces the player to switch camera views to thoroughly inspect the room and discover hidden interactables.
 
-### Step 2: Inventory System (5-Slot Limit, Equip, Swapping & Cancellation)
+### Step 2: Inventory System (5-Slot Limit, Equip, Swapping & Container Drop)
 1. **Strict 5-Slot Capacity:** Player inventory is capped at exactly 5 slots.
 2. **Item Use & Equip (No Discarding):**
    - Players can equip weapons/tools or consume healing items (Herbs, Bandages, First Aid Spray).
-   - Items cannot be discarded onto the floor.
-3. **Item Swapping Logic:**
+   - Items cannot be arbitrarily discarded onto the floor.
+3. **Item Swapping & World Container Exchange:**
    - When picking up a new item while the inventory is at capacity (5 items):
      - The mouse cursor transforms into a **Hand Icon** to indicate picking/swapping mode.
-     - The player must click an existing item in their 5-slot inventory to swap and replace it with the newly discovered item.
+     - The player selects an existing item in their 5-slot inventory to swap out.
+     - **Container/Ground Exchange Rule:** The swapped-out inventory item replaces the picked-up item inside its original container or ground hotspot! The old item is NOT lost; it remains stored in the container/hotspot so the player can return and pick it up again later.
    - **Picking Cancellation:** The player can cancel the picking/swapping state at any time via ESC, right-click, or a "Cancel Pick" button.
    - **Zombie Combat Interrupt:** If a zombie attacks the player while in picking/swapping mode, the picking action is automatically interrupted and cancelled!
 
