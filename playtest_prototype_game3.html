@@ -592,6 +592,28 @@
     </div>
   </div>
 
+  <!-- Document Reader Modal -->
+  <div class="modal-overlay" id="documentModal">
+    <div class="modal-card" style="max-width: 580px; text-align: left;">
+      <div class="modal-header">
+        <h3 id="docTitle">📜 Document File</h3>
+        <button class="btn" id="btnCloseDoc">✕ Close Note</button>
+      </div>
+      <div class="modal-body" style="padding: 20px; background: rgba(15, 23, 42, 0.85); border-radius: 8px; border: 1px solid var(--border-color);">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
+          <div style="font-size: 2.2rem;" id="docIcon">📜</div>
+          <div>
+            <h4 style="font-size: 1.1rem; color: var(--accent-gold); margin: 0;" id="docHeaderTitle">Security Log</h4>
+            <div style="font-size: 0.75rem; color: var(--text-muted);" id="docMeta">Classification: Diegetic Incident File</div>
+          </div>
+        </div>
+        <p style="font-size: 0.95rem; color: #e2e8f0; line-height: 1.6; white-space: pre-wrap; font-family: 'Courier New', Courier, monospace; background: rgba(0,0,0,0.4); padding: 16px; border-radius: 6px; border-left: 3px solid var(--accent-gold);" id="docBodyText">
+          Document content text...
+        </p>
+      </div>
+    </div>
+  </div>
+
   <!-- Map Modal -->
   <div class="modal-overlay" id="mapModal">
     <div class="modal-card" style="max-width: 720px; text-align: center;">
@@ -1280,6 +1302,14 @@
     // --- HOTSPOT CLICK HANDLER ---
     function handleHotspotClick(hs) {
       if (state.playerHp <= 0) return;
+      // Document / Lore Note Reading
+      if (hs.type === 'document') {
+        playSound('pickup');
+        showDocumentModal(hs.title || hs.name, hs.content || 'No text content recorded.', hs.icon || '📜');
+        addLog(`📜 Read Document: [${hs.name || hs.title}]`, 'info');
+        return;
+      }
+      
       // NPC Safe Room Interaction
       if (hs.type === 'npc') {
         playSound('click');
@@ -1655,6 +1685,19 @@
       playSound('click');
       render2DFloorMap();
       document.getElementById('mapModal').classList.add('active');
+    });
+
+    function showDocumentModal(title, content, icon = '📜') {
+      document.getElementById('docTitle').textContent = `${icon} ${title}`;
+      document.getElementById('docHeaderTitle').textContent = title;
+      document.getElementById('docIcon').textContent = icon;
+      document.getElementById('docBodyText').textContent = content;
+      document.getElementById('documentModal').classList.add('active');
+    }
+
+    document.getElementById('btnCloseDoc').addEventListener('click', () => {
+      playSound('click');
+      document.getElementById('documentModal').classList.remove('active');
     });
 
     document.getElementById('btnCloseMap').addEventListener('click', () => {

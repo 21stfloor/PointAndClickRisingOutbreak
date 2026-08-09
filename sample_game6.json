@@ -1,0 +1,1905 @@
+{
+  "scenario_title": "Outbreak: Blackwood High Incident (Diegetic Document Files & Lore Clues)",
+  "level_design_rules": {
+    "dimensions_unit": "meters",
+    "coordinate_system": "Right-handed (X: Right, Y: Forward, Z: Up)",
+    "scale_style": "Scale over size (Tight, claustrophobic survival horror bounds)",
+    "modular_snapping_grid": 3.0
+  },
+  "survival_horror_systems": {
+    "hub_node_id": "RM_02_MAIN_VESTIBULE",
+    "secondary_hub_node_id": "HW_02_CENTRAL_CONCOURSE",
+    "primary_progression_gate": {
+      "entity_id": "APEX_MOTORIZED_SHUTTER",
+      "required_item": "key_docks_master",
+      "located_in_room": "RM_05_LOADING_DOCK"
+    },
+    "tier_ceiling_by_zone": {
+      "alley": {
+        "max_tier": 0,
+        "allowed_weapon_pickups": [
+          1
+        ]
+      },
+      "school": {
+        "max_tier": 2,
+        "allowed_weapon_pickups": [
+          1,
+          2
+        ]
+      },
+      "docks": {
+        "max_tier": 3,
+        "allowed_weapon_pickups": [
+          2,
+          3
+        ]
+      }
+    },
+    "container_emptiness_tuning": {
+      "alley_ratio": 0.65,
+      "school_ratio": 0.55,
+      "docks_ratio": 0.5,
+      "overall_emptiness_percent": "53.8%"
+    },
+    "puzzle_gates": [
+      {
+        "puzzle_id": "PUZ_01_PADLOCK",
+        "name": "Rusted Vent Padlock",
+        "archetype": "Item-matching key lock",
+        "diegetic_hook": "A padlocked steel grate blocking duct entrance behind crashed truck.",
+        "key_item_required": "key_alley_padlock",
+        "gates_access_to": "HW_01_BASEMENT_VENT",
+        "gated_tier": 1
+      },
+      {
+        "puzzle_id": "PUZ_02_ADMISSIONS_FUSE",
+        "name": "Main Concourse Security Gate Fuse",
+        "archetype": "Light/switch power restoration",
+        "diegetic_hook": "Security gate panel missing a 20A ceramic fuse in the Main Vestibule.",
+        "key_item_required": "ITEM_FUSE",
+        "gates_access_to": "HW_02_CENTRAL_CONCOURSE",
+        "gated_tier": 1
+      },
+      {
+        "puzzle_id": "PUZ_03_CHEMICAL_SYNTHESIS",
+        "name": "Bio-Growth Dissolvent Compound",
+        "archetype": "Two-item chemical combination puzzle",
+        "diegetic_hook": "Pulsating viral bio-growth clogging the principal office wing door.",
+        "key_item_required": "ITEM_CHEMICAL_AGENT",
+        "gates_access_to": "RM_04_PRINCIPAL",
+        "gated_tier": 2
+      },
+      {
+        "puzzle_id": "PUZ_04_DESK_PORTRAIT_SAFE",
+        "name": "Principal's Portrait Combination Safe",
+        "archetype": "Symbol / dial combination lock",
+        "diegetic_hook": "A hidden wall safe behind the founder's oil painting with dial code hinted in staff memos.",
+        "key_item_required": "key_faculty_wing",
+        "gates_access_to": "SAFE_MASTER_SECURITY",
+        "gated_tier": 2
+      },
+      {
+        "puzzle_id": "PUZ_05_DOCK_GENERATOR",
+        "name": "Loading Dock Motorized Shutter Power",
+        "archetype": "Environmental cause-and-effect power restoration",
+        "diegetic_hook": "Generator board in the harbor yard requiring fuel/circuit override to open main exit shutter.",
+        "key_item_required": "key_docks_master",
+        "gates_access_to": "APEX_MOTORIZED_SHUTTER",
+        "gated_tier": 3
+      }
+    ],
+    "backtracking_loops": [
+      {
+        "loop_id": "LOOP_01_ADMISSIONS_TO_HUB",
+        "catalyst_event": "EVENT_FUSE_PICKUP",
+        "trigger_item": "ITEM_FUSE",
+        "trigger_location": "RM_02_ADMISSIONS",
+        "one_way_shortcuts_unlocked": [
+          {
+            "shortcut_id": "SHORTCUT_ADMISSIONS_TO_VESTIBULE",
+            "from_room": "RM_02_ADMISSIONS",
+            "to_room": "RM_02_MAIN_VESTIBULE",
+            "type": "One_Way_Pass_Door"
+          }
+        ],
+        "recontextualized_world_state": {
+          "affected_rooms": [
+            "RM_02_MAIN_VESTIBULE",
+            "RM_02_ADMISSIONS"
+          ],
+          "environmental_changes": {
+            "lighting": "emergency_red_strobe",
+            "audio_track": "alarm_siren_loop",
+            "props": [
+              "shattered_window_glass",
+              "sparking_circuit_breaker"
+            ]
+          },
+          "new_threat_spawns": []
+        }
+      },
+      {
+        "loop_id": "LOOP_02_JANITOR_FIRE_EXIT",
+        "catalyst_event": "EVENT_CHEMICAL_SYNTHESIS",
+        "trigger_item": "ITEM_CHEMICAL_AGENT",
+        "trigger_location": "RM_03_LAB_A",
+        "one_way_shortcuts_unlocked": [
+          {
+            "shortcut_id": "SHORTCUT_JANITOR_TO_LAB",
+            "from_room": "RM_03_JANITOR_NORTH",
+            "to_room": "RM_03_LAB_A",
+            "type": "One_Way_Shortcut_Handle"
+          }
+        ],
+        "recontextualized_world_state": {
+          "affected_rooms": [
+            "HW_02_CENTRAL_CONCOURSE",
+            "RM_03_LAB_A"
+          ],
+          "environmental_changes": {
+            "lighting": "gas_hazard_green_haze",
+            "audio_track": "leaking_steam_hiss",
+            "props": [
+              "shattered_beakers",
+              "spilled_corrosive_fluid"
+            ]
+          },
+          "new_threat_spawns": []
+        }
+      },
+      {
+        "loop_id": "LOOP_03_PRINCIPAL_LOCKDOWN",
+        "catalyst_event": "EVENT_MASTER_KEYCARD_PICKUP",
+        "trigger_item": "ITEM_MASTER_KEYCARD",
+        "trigger_location": "RM_04_PRINCIPAL",
+        "one_way_shortcuts_unlocked": [
+          {
+            "shortcut_id": "SHORTCUT_PRINCIPAL_SUITE_EXIT",
+            "from_room": "RM_04_PRINCIPAL",
+            "to_room": "HW_02_CENTRAL_CONCOURSE",
+            "type": "Standard_Interior_Door"
+          }
+        ],
+        "recontextualized_world_state": {
+          "affected_rooms": [
+            "RM_04_PRINCIPAL",
+            "HW_02_CENTRAL_CONCOURSE",
+            "RM_02_MAIN_VESTIBULE"
+          ],
+          "environmental_changes": {
+            "lighting": "full_facility_red_alert",
+            "audio_track": "evacuation_siren_klaxon",
+            "props": [
+              "shattered_glass_partition",
+              "collapsed_ceiling_duct"
+            ]
+          },
+          "new_threat_spawns": []
+        }
+      }
+    ]
+  },
+  "level_balance_metrics": {
+    "total_containers": 26,
+    "empty_containers": 14,
+    "total_loot_damage_potential": 1700,
+    "total_enemy_hp": 530,
+    "health_ammo_supply_ratio": 1.11,
+    "ratio_classification": "Pacing Optimized (No Consecutiveness, Alleyway Cleared)"
+  },
+  "spatial_nodes": [
+    {
+      "room_id": "RM_01_ALLEYWAY",
+      "room_name": "The Gray Mussel Alleyway (Prologue)",
+      "progression_step": 1,
+      "objective_beat": "Escape the alleyway collapse, retrieve the rusted padlock key near the truck wreck, and unlock the basement vent grate.",
+      "puzzle_gate_id": "PUZ_01_PADLOCK",
+      "dimensions": {
+        "width_x": 4.0,
+        "length_y": 30.0,
+        "height_z": 6.0
+      },
+      "center_position": {
+        "x": 0.0,
+        "y": -15.0,
+        "z": 3.0
+      },
+      "functional_entities": [
+        {
+          "entity_id": "SPAWN_PLAYERS",
+          "type": "Player_Start_Node",
+          "local_pos": {
+            "x": 0.0,
+            "y": -12.0,
+            "z": -2.5
+          },
+          "bounds": {
+            "x": 0.5,
+            "y": 0.5,
+            "z": 1.0
+          }
+        },
+        {
+          "entity_id": "PROP_CRASHED_TRUCK",
+          "type": "Static_Collider_Cube",
+          "local_pos": {
+            "x": 0.0,
+            "y": -13.5,
+            "z": -1.5
+          },
+          "bounds": {
+            "x": 3.2,
+            "y": 2.0,
+            "z": 3.0
+          }
+        },
+        {
+          "entity_id": "KEY_PADLOCK_ITEM",
+          "type": "Key_Item_Node",
+          "local_pos": {
+            "x": 1.2,
+            "y": 5.0,
+            "z": -2.75
+          },
+          "bounds": {
+            "x": 0.5,
+            "y": 0.5,
+            "z": 0.5
+          },
+          "item": {
+            "item_id": "key_alley_padlock",
+            "quantity": 1,
+            "tier": 0
+          }
+        },
+        {
+          "entity_id": "CONTAINER_TRUCK_CAB",
+          "type": "Container",
+          "local_pos": {
+            "x": -0.8,
+            "y": -13.0,
+            "z": -1.0
+          },
+          "bounds": {
+            "x": 0.6,
+            "y": 0.6,
+            "z": 0.6
+          },
+          "items": [
+            {
+              "item_id": "ammo_handgun",
+              "quantity": 10,
+              "tier": 0
+            }
+          ]
+        },
+        {
+          "entity_id": "CONTAINER_TRASH_BIN_01",
+          "type": "Container",
+          "local_pos": {
+            "x": 1.5,
+            "y": -2.0,
+            "z": -2.5
+          },
+          "bounds": {
+            "x": 0.8,
+            "y": 0.8,
+            "z": 1.0
+          },
+          "items": []
+        },
+        {
+          "entity_id": "CONTAINER_CRATE_01",
+          "type": "Container",
+          "local_pos": {
+            "x": -1.2,
+            "y": 2.0,
+            "z": -2.5
+          },
+          "bounds": {
+            "x": 0.8,
+            "y": 0.8,
+            "z": 0.8
+          },
+          "items": [
+            {
+              "item_id": "cloth_scrap",
+              "quantity": 2,
+              "tier": 0
+            }
+          ]
+        },
+        {
+          "entity_id": "DOC_ALLEY_LOG",
+          "type": "Document_Item_Node",
+          "title": "Truck Driver's Freight Manifest Log",
+          "content": "Log Entry #881: The highway barricades collapsed under horde pressure at midnight. If ductwork ingress is required, the rusted padlock key for the basement vent grate is near the crushed truck front cab.",
+          "icon": "\ud83d\udcdc"
+        }
+      ],
+      "enemies": [],
+      "connections": [
+        {
+          "connected_to": "HW_01_BASEMENT_VENT",
+          "type": "Padlocked_Grate_Vent",
+          "exit_vector": {
+            "x": 0.0,
+            "y": 15.0,
+            "z": 0.5
+          }
+        }
+      ],
+      "fixed_cameras": [
+        {
+          "camera_id": "CAM_01_A",
+          "position": {
+            "x": -1.8,
+            "y": -14.0,
+            "z": 4.5
+          },
+          "rotation_euler": {
+            "x": 25.0,
+            "y": 0.0,
+            "z": -45.0
+          }
+        }
+      ]
+    },
+    {
+      "room_id": "HW_01_BASEMENT_VENT",
+      "room_name": "Basement Ventilation Ingress Shunt",
+      "progression_step": 1,
+      "objective_beat": "Crawl through the dark ventilation ductwork to access the school's lower basement level.",
+      "dimensions": {
+        "width_x": 3.0,
+        "length_y": 12.0,
+        "height_z": 3.0
+      },
+      "center_position": {
+        "x": 0.0,
+        "y": 6.0,
+        "z": -1.5
+      },
+      "functional_entities": [
+        {
+          "entity_id": "CONTAINER_VENT_CORNER_DUST",
+          "type": "Container",
+          "local_pos": {
+            "x": 0.8,
+            "y": 2.0,
+            "z": -1.0
+          },
+          "bounds": {
+            "x": 0.5,
+            "y": 0.5,
+            "z": 0.5
+          },
+          "items": [
+            {
+              "item_id": "flashlight_battery",
+              "quantity": 1,
+              "tier": 0
+            }
+          ]
+        },
+        {
+          "entity_id": "CONTAINER_MAINTENANCE_LOCKER",
+          "type": "Container",
+          "local_pos": {
+            "x": -0.8,
+            "y": 4.0,
+            "z": -1.0
+          },
+          "bounds": {
+            "x": 0.8,
+            "y": 0.5,
+            "z": 1.8
+          },
+          "items": []
+        }
+      ],
+      "enemies": [],
+      "connections": [
+        {
+          "connected_to": "RM_01_ALLEYWAY",
+          "type": "Vent_Entrance",
+          "exit_vector": {
+            "x": 0.0,
+            "y": -6.0,
+            "z": 2.0
+          }
+        },
+        {
+          "connected_to": "RM_02_MAIN_VESTIBULE",
+          "type": "Drop_Ladder_Access",
+          "exit_vector": {
+            "x": 0.0,
+            "y": 6.0,
+            "z": 1.5
+          }
+        }
+      ],
+      "fixed_cameras": [
+        {
+          "camera_id": "CAM_01_VENT",
+          "position": {
+            "x": 0.0,
+            "y": -5.0,
+            "z": -0.2
+          },
+          "rotation_euler": {
+            "x": 10.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        }
+      ]
+    },
+    {
+      "room_id": "RM_02_MAIN_VESTIBULE",
+      "room_name": "Main Vestibule Hub",
+      "progression_step": 2,
+      "objective_beat": "Collect the school layout map from the kiosk desk and investigate the admissions wing to find a replacement power fuse for the security gate.",
+      "puzzle_gate_id": "PUZ_02_ADMISSIONS_FUSE",
+      "dimensions": {
+        "width_x": 12.0,
+        "length_y": 12.0,
+        "height_z": 5.0
+      },
+      "center_position": {
+        "x": 0.0,
+        "y": 18.0,
+        "z": 2.5
+      },
+      "functional_entities": [
+        {
+          "entity_id": "KIOSK_MAP_DESK",
+          "type": "Interactive_Console_Node",
+          "local_pos": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -1.75
+          },
+          "bounds": {
+            "x": 2.0,
+            "y": 1.5,
+            "z": 1.5
+          }
+        },
+        {
+          "entity_id": "ITEM_LAYOUT_MAP",
+          "type": "Key_Item_Node",
+          "local_pos": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -0.8
+          },
+          "bounds": {
+            "x": 0.4,
+            "y": 0.4,
+            "z": 0.4
+          }
+        },
+        {
+          "entity_id": "SHORTCUT_GATE",
+          "type": "Electronic_Gate_Movable_Mesh",
+          "local_pos": {
+            "x": 0.0,
+            "y": 5.2,
+            "z": -0.5
+          },
+          "bounds": {
+            "x": 3.0,
+            "y": 0.4,
+            "z": 3.5
+          },
+          "initially_locked": true
+        },
+        {
+          "entity_id": "CONTAINER_VESTIBULE_DESK",
+          "type": "Container",
+          "local_pos": {
+            "x": -4.0,
+            "y": -2.0,
+            "z": -1.5
+          },
+          "bounds": {
+            "x": 1.2,
+            "y": 0.6,
+            "z": 0.8
+          },
+          "items": [
+            {
+              "item_id": "weapon_handgun",
+              "quantity": 1,
+              "tier": 1
+            }
+          ]
+        },
+        {
+          "entity_id": "CONTAINER_SECURITY_LOCKER_01",
+          "type": "Container",
+          "local_pos": {
+            "x": 4.5,
+            "y": 3.0,
+            "z": -1.0
+          },
+          "bounds": {
+            "x": 0.8,
+            "y": 0.5,
+            "z": 1.8
+          },
+          "items": [
+            {
+              "item_id": "ammo_handgun",
+              "quantity": 15,
+              "tier": 0
+            }
+          ]
+        },
+        {
+          "entity_id": "CONTAINER_BENCH_DRAWER",
+          "type": "Container",
+          "local_pos": {
+            "x": -4.5,
+            "y": 2.5,
+            "z": -1.8
+          },
+          "bounds": {
+            "x": 0.6,
+            "y": 0.6,
+            "z": 0.6
+          },
+          "items": []
+        },
+        {
+          "entity_id": "CONTAINER_NOTICE_BOARD_BOX",
+          "type": "Container",
+          "local_pos": {
+            "x": 2.0,
+            "y": -4.5,
+            "z": -1.5
+          },
+          "bounds": {
+            "x": 0.5,
+            "y": 0.5,
+            "z": 0.5
+          },
+          "items": []
+        },
+        {
+          "entity_id": "DOC_SECURITY_MEMO",
+          "type": "Document_Item_Node",
+          "title": "Security Guard Duty Memo",
+          "content": "Attention Staff: Main concourse security gate circuit breaker tripped during evacuation. The replacement 20A ceramic fuse was removed and stored inside the Admissions Reception Wing filing cabinet.",
+          "icon": "\ud83d\udcdc"
+        }
+      ],
+      "enemies": [
+        {
+          "enemy_id": "zombie_vestibule_patroller",
+          "type": "Standard_Zombie",
+          "behavior": "Patrol",
+          "health": 80,
+          "spawn_position": {
+            "x": 1.5,
+            "y": 2.0,
+            "z": -1.5
+          }
+        }
+      ],
+      "connections": [
+        {
+          "connected_to": "HW_01_BASEMENT_VENT",
+          "type": "Basement_Floor_Grate",
+          "exit_vector": {
+            "x": 0.0,
+            "y": -5.9,
+            "z": 0.0
+          }
+        },
+        {
+          "connected_to": "RM_02_ADMISSIONS",
+          "type": "Shattered_Window_Partition",
+          "exit_vector": {
+            "x": 5.9,
+            "y": -2.0,
+            "z": 1.0
+          }
+        },
+        {
+          "connected_to": "HW_02_CENTRAL_CONCOURSE",
+          "type": "Electronic_Security_Gate",
+          "exit_vector": {
+            "x": 0.0,
+            "y": 5.9,
+            "z": 0.0
+          }
+        }
+      ],
+      "fixed_cameras": [
+        {
+          "camera_id": "CAM_02_A",
+          "position": {
+            "x": 4.5,
+            "y": -4.5,
+            "z": 4.0
+          },
+          "rotation_euler": {
+            "x": 30.0,
+            "y": 0.0,
+            "z": -135.0
+          }
+        },
+        {
+          "camera_id": "CAM_02_B",
+          "position": {
+            "x": -2.5,
+            "y": 4.0,
+            "z": 3.0
+          },
+          "rotation_euler": {
+            "x": 35.0,
+            "y": 0.0,
+            "z": 45.0
+          }
+        }
+      ]
+    },
+    {
+      "room_id": "RM_02_ADMISSIONS",
+      "room_name": "Admissions Reception Wing",
+      "progression_step": 2,
+      "objective_beat": "Clamber into admissions office, retrieve the electrical fuse, withstand the ceiling zombie drop, and unlock the classroom key.",
+      "dimensions": {
+        "width_x": 8.0,
+        "length_y": 8.0,
+        "height_z": 4.0
+      },
+      "center_position": {
+        "x": 10.0,
+        "y": 18.0,
+        "z": 2.0
+      },
+      "functional_entities": [
+        {
+          "entity_id": "NPC_CLIFFORD_PENA",
+          "type": "NPC_Interaction_Node",
+          "local_pos": {
+            "x": -2.0,
+            "y": 2.0,
+            "z": -1.1
+          },
+          "bounds": {
+            "x": 0.6,
+            "y": 0.6,
+            "z": 1.8
+          }
+        },
+        {
+          "entity_id": "Friction_ZOMBIE_CEILING",
+          "type": "Enemy_Spawn_Node",
+          "local_pos": {
+            "x": 1.0,
+            "y": -1.0,
+            "z": 1.2
+          },
+          "bounds": {
+            "x": 0.8,
+            "y": 0.8,
+            "z": 1.8
+          }
+        },
+        {
+          "entity_id": "ITEM_FUSE",
+          "type": "Key_Item_Node",
+          "local_pos": {
+            "x": 2.5,
+            "y": 2.5,
+            "z": -1.2
+          },
+          "bounds": {
+            "x": 0.4,
+            "y": 0.4,
+            "z": 0.4
+          }
+        },
+        {
+          "entity_id": "PROP_HEAVY_CABINET",
+          "type": "Movable_Obstacle_Cube",
+          "local_pos": {
+            "x": -3.2,
+            "y": -2.0,
+            "z": -1.0
+          },
+          "bounds": {
+            "x": 0.8,
+            "y": 1.8,
+            "z": 2.0
+          }
+        },
+        {
+          "entity_id": "CONTAINER_ADMISSIONS_FILING_CABINET",
+          "type": "Container",
+          "local_pos": {
+            "x": 2.5,
+            "y": -2.5,
+            "z": -1.0
+          },
+          "bounds": {
+            "x": 0.8,
+            "y": 1.2,
+            "z": 1.6
+          },
+          "items": [
+            {
+              "item_id": "key_classroom_master",
+              "quantity": 1,
+              "tier": 1
+            }
+          ]
+        },
+        {
+          "entity_id": "CONTAINER_RECEPTION_DESK_01",
+          "type": "Container",
+          "local_pos": {
+            "x": -1.0,
+            "y": -2.5,
+            "z": -1.2
+          },
+          "bounds": {
+            "x": 0.6,
+            "y": 0.6,
+            "z": 0.6
+          },
+          "items": [
+            {
+              "item_id": "herb_green",
+              "quantity": 1,
+              "tier": 1
+            }
+          ]
+        },
+        {
+          "entity_id": "CONTAINER_RECEPTION_DESK_02",
+          "type": "Container",
+          "local_pos": {
+            "x": -2.5,
+            "y": -2.5,
+            "z": -1.2
+          },
+          "bounds": {
+            "x": 0.6,
+            "y": 0.6,
+            "z": 0.6
+          },
+          "items": []
+        },
+        {
+          "entity_id": "CONTAINER_STAFF_LOCKER_01",
+          "type": "Container",
+          "local_pos": {
+            "x": 3.0,
+            "y": 0.0,
+            "z": -1.0
+          },
+          "bounds": {
+            "x": 0.6,
+            "y": 0.6,
+            "z": 1.8
+          },
+          "items": []
+        }
+      ],
+      "enemies": [],
+      "connections": [
+        {
+          "connected_to": "RM_02_MAIN_VESTIBULE",
+          "type": "One_Way_Pass_Door",
+          "exit_vector": {
+            "x": -3.9,
+            "y": -2.0,
+            "z": 0.0
+          }
+        },
+        {
+          "connected_to": "HW_02_CENTRAL_CONCOURSE",
+          "type": "Standard_Interior_Door",
+          "exit_vector": {
+            "x": 0.0,
+            "y": 3.9,
+            "z": 0.0
+          }
+        }
+      ],
+      "fixed_cameras": [
+        {
+          "camera_id": "CAM_03_RECEPTION",
+          "position": {
+            "x": -3.0,
+            "y": -3.0,
+            "z": 3.5
+          },
+          "rotation_euler": {
+            "x": 20.0,
+            "y": 0.0,
+            "z": -45.0
+          }
+        }
+      ]
+    },
+    {
+      "room_id": "HW_02_CENTRAL_CONCOURSE",
+      "room_name": "Central Concourse Hallway",
+      "progression_step": 2,
+      "objective_beat": "Traverse the biogrowth-choked concourse to reach Science Lab A and the Principal's Office wing.",
+      "puzzle_gate_id": "PUZ_03_CHEMICAL_SYNTHESIS",
+      "dimensions": {
+        "width_x": 4.0,
+        "length_y": 24.0,
+        "height_z": 4.0
+      },
+      "center_position": {
+        "x": 0.0,
+        "y": 36.0,
+        "z": 2.0
+      },
+      "functional_entities": [
+        {
+          "entity_id": "BIO_GROWTH_OBSTRUCTION",
+          "type": "Static_Collider_Cube",
+          "local_pos": {
+            "x": -1.2,
+            "y": 9.5,
+            "z": -0.75
+          },
+          "bounds": {
+            "x": 1.0,
+            "y": 1.8,
+            "z": 2.5
+          }
+        },
+        {
+          "entity_id": "CONTAINER_TROPHY_CASE",
+          "type": "Container",
+          "local_pos": {
+            "x": 1.2,
+            "y": -5.0,
+            "z": -1.0
+          },
+          "bounds": {
+            "x": 0.6,
+            "y": 1.8,
+            "z": 1.5
+          },
+          "items": [
+            {
+              "item_id": "ammo_shotgun_shells",
+              "quantity": 4,
+              "tier": 1
+            }
+          ]
+        },
+        {
+          "entity_id": "CONTAINER_STUDENT_LOCKER_01",
+          "type": "Container",
+          "local_pos": {
+            "x": -1.5,
+            "y": -8.0,
+            "z": -1.0
+          },
+          "bounds": {
+            "x": 0.5,
+            "y": 0.5,
+            "z": 1.8
+          },
+          "items": [
+            {
+              "item_id": "bandages",
+              "quantity": 2,
+              "tier": 0
+            }
+          ]
+        },
+        {
+          "entity_id": "CONTAINER_STUDENT_LOCKER_02",
+          "type": "Container",
+          "local_pos": {
+            "x": -1.5,
+            "y": -6.5,
+            "z": -1.0
+          },
+          "bounds": {
+            "x": 0.5,
+            "y": 0.5,
+            "z": 1.8
+          },
+          "items": []
+        },
+        {
+          "entity_id": "CONTAINER_STUDENT_LOCKER_03",
+          "type": "Container",
+          "local_pos": {
+            "x": -1.5,
+            "y": 2.0,
+            "z": -1.0
+          },
+          "bounds": {
+            "x": 0.5,
+            "y": 0.5,
+            "z": 1.8
+          },
+          "items": []
+        },
+        {
+          "entity_id": "CONTAINER_MAINTENANCE_CART",
+          "type": "Container",
+          "local_pos": {
+            "x": 1.2,
+            "y": 6.0,
+            "z": -1.5
+          },
+          "bounds": {
+            "x": 0.8,
+            "y": 1.2,
+            "z": 1.0
+          },
+          "items": [
+            {
+              "item_id": "tool_lockpick",
+              "quantity": 1,
+              "tier": 1
+            }
+          ]
+        }
+      ],
+      "enemies": [
+        {
+          "enemy_id": "zombie_concourse_patroller_01",
+          "type": "Standard_Zombie",
+          "behavior": "Patrol",
+          "health": 80,
+          "spawn_position": {
+            "x": 0.0,
+            "y": -6.0,
+            "z": -1.0
+          }
+        }
+      ],
+      "connections": [
+        {
+          "connected_to": "RM_02_MAIN_VESTIBULE",
+          "type": "Electronic_Security_Gate",
+          "exit_vector": {
+            "x": 0.0,
+            "y": -11.9,
+            "z": 0.0
+          }
+        },
+        {
+          "connected_to": "RM_02_ADMISSIONS",
+          "type": "Standard_Interior_Door",
+          "exit_vector": {
+            "x": 1.9,
+            "y": -9.0,
+            "z": 0.0
+          }
+        },
+        {
+          "connected_to": "RM_03_LAB_A",
+          "type": "Standard_Interior_Door",
+          "exit_vector": {
+            "x": -1.9,
+            "y": -2.0,
+            "z": 0.0
+          }
+        },
+        {
+          "connected_to": "RM_04_PRINCIPAL",
+          "type": "Blocked_Bio_Door",
+          "exit_vector": {
+            "x": -1.9,
+            "y": 10.0,
+            "z": 0.0
+          }
+        },
+        {
+          "connected_to": "HW_03_LOADING_CORRIDOR",
+          "type": "Master_Keycard_Door",
+          "exit_vector": {
+            "x": 0.0,
+            "y": 11.9,
+            "z": 0.0
+          }
+        }
+      ],
+      "fixed_cameras": [
+        {
+          "camera_id": "CAM_CONCOURSE_SOUTH",
+          "position": {
+            "x": 0.0,
+            "y": -10.0,
+            "z": 3.5
+          },
+          "rotation_euler": {
+            "x": 15.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        {
+          "camera_id": "CAM_CONCOURSE_NORTH",
+          "position": {
+            "x": 1.5,
+            "y": 9.0,
+            "z": 3.2
+          },
+          "rotation_euler": {
+            "x": 22.0,
+            "y": 0.0,
+            "z": 140.0
+          }
+        }
+      ]
+    },
+    {
+      "room_id": "RM_03_LAB_A",
+      "room_name": "Science Laboratory A",
+      "progression_step": 3,
+      "objective_beat": "Purge toxic gas hazards, obtain chemical compound materials from the safe cabinet, and synthesize the agent to dissolve the concourse bio-door.",
+      "dimensions": {
+        "width_x": 10.0,
+        "length_y": 10.0,
+        "height_z": 4.0
+      },
+      "center_position": {
+        "x": -7.0,
+        "y": 34.0,
+        "z": 2.0
+      },
+      "functional_entities": [
+        {
+          "entity_id": "HAZARD_GAS_VOLUME",
+          "type": "Environmental_Damage_Zone",
+          "local_pos": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -1.6
+          },
+          "bounds": {
+            "x": 9.0,
+            "y": 9.0,
+            "z": 0.8
+          }
+        },
+        {
+          "entity_id": "PROP_LAB_BENCH_01",
+          "type": "Static_Collider_Cube",
+          "local_pos": {
+            "x": -2.0,
+            "y": 0.0,
+            "z": -1.25
+          },
+          "bounds": {
+            "x": 1.5,
+            "y": 5.5,
+            "z": 1.0
+          }
+        },
+        {
+          "entity_id": "PROP_LAB_BENCH_02",
+          "type": "Static_Collider_Cube",
+          "local_pos": {
+            "x": 2.0,
+            "y": 0.0,
+            "z": -1.25
+          },
+          "bounds": {
+            "x": 1.5,
+            "y": 5.5,
+            "z": 1.0
+          }
+        },
+        {
+          "entity_id": "SAFE_CHEMICAL_CABINET",
+          "type": "Interactive_Console_Node",
+          "local_pos": {
+            "x": -4.2,
+            "y": 3.5,
+            "z": -0.8
+          },
+          "bounds": {
+            "x": 1.0,
+            "y": 1.5,
+            "z": 1.8
+          }
+        },
+        {
+          "entity_id": "ITEM_CHEMICAL_AGENT",
+          "type": "Key_Item_Node",
+          "local_pos": {
+            "x": -4.2,
+            "y": 3.5,
+            "z": 0.2
+          },
+          "bounds": {
+            "x": 0.4,
+            "y": 0.4,
+            "z": 0.4
+          }
+        },
+        {
+          "entity_id": "CONTAINER_HAZMAT_CABINET",
+          "type": "Container",
+          "local_pos": {
+            "x": 4.0,
+            "y": 2.5,
+            "z": -1.0
+          },
+          "bounds": {
+            "x": 0.8,
+            "y": 1.2,
+            "z": 1.8
+          },
+          "items": [
+            {
+              "item_id": "weapon_shotgun",
+              "quantity": 1,
+              "tier": 2
+            }
+          ]
+        },
+        {
+          "entity_id": "CONTAINER_LAB_DRAWER_01",
+          "type": "Container",
+          "local_pos": {
+            "x": -2.0,
+            "y": -2.0,
+            "z": -1.5
+          },
+          "bounds": {
+            "x": 0.6,
+            "y": 0.6,
+            "z": 0.6
+          },
+          "items": [
+            {
+              "item_id": "herb_combined_green_blue",
+              "quantity": 1,
+              "tier": 2
+            }
+          ]
+        },
+        {
+          "entity_id": "CONTAINER_LAB_DRAWER_02",
+          "type": "Container",
+          "local_pos": {
+            "x": 2.0,
+            "y": -2.0,
+            "z": -1.5
+          },
+          "bounds": {
+            "x": 0.6,
+            "y": 0.6,
+            "z": 0.6
+          },
+          "items": []
+        },
+        {
+          "entity_id": "CONTAINER_CHEMICAL_SHELF",
+          "type": "Container",
+          "local_pos": {
+            "x": 4.0,
+            "y": -3.0,
+            "z": -1.0
+          },
+          "bounds": {
+            "x": 0.8,
+            "y": 1.5,
+            "z": 1.8
+          },
+          "items": []
+        },
+        {
+          "entity_id": "DOC_SYNTHESIS_NOTES",
+          "type": "Document_Item_Node",
+          "title": "Bio-Synthesis Protocol Notes",
+          "content": "Lab Report #104: Pulsating viral bio-growth obstructions blocking administrative doors can only be dissolved using Bio-Growth Dissolvent Compound. Synthesize and apply directly to organic tissue.",
+          "icon": "\ud83d\udcc4"
+        }
+      ],
+      "enemies": [],
+      "connections": [
+        {
+          "connected_to": "HW_02_CENTRAL_CONCOURSE",
+          "type": "Standard_Interior_Door",
+          "exit_vector": {
+            "x": 4.9,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        {
+          "connected_to": "RM_03_JANITOR_NORTH",
+          "type": "Emergency_Fire_Door",
+          "exit_vector": {
+            "x": 0.0,
+            "y": 4.9,
+            "z": 0.0
+          }
+        }
+      ],
+      "fixed_cameras": [
+        {
+          "camera_id": "CAM_LAB_A",
+          "position": {
+            "x": 4.0,
+            "y": -4.0,
+            "z": 3.6
+          },
+          "rotation_euler": {
+            "x": 28.0,
+            "y": 0.0,
+            "z": -45.0
+          }
+        }
+      ]
+    },
+    {
+      "room_id": "RM_03_JANITOR_NORTH",
+      "room_name": "Janitorial Closet North",
+      "progression_step": 3,
+      "objective_beat": "Unlock the emergency fire door shortcut and replenish medical supplies.",
+      "dimensions": {
+        "width_x": 4.0,
+        "length_y": 4.0,
+        "height_z": 3.5
+      },
+      "center_position": {
+        "x": -7.0,
+        "y": 41.0,
+        "z": 1.75
+      },
+      "functional_entities": [
+        {
+          "entity_id": "ITEM_GREEN_HERB",
+          "type": "Consumable_Item_Node",
+          "local_pos": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": -1.4
+          },
+          "bounds": {
+            "x": 0.4,
+            "y": 0.4,
+            "z": 0.4
+          }
+        },
+        {
+          "entity_id": "CONTAINER_SUPPLY_CABINET",
+          "type": "Container",
+          "local_pos": {
+            "x": -1.0,
+            "y": 1.0,
+            "z": -1.0
+          },
+          "bounds": {
+            "x": 0.8,
+            "y": 1.2,
+            "z": 1.6
+          },
+          "items": [
+            {
+              "item_id": "herb_green",
+              "quantity": 2,
+              "tier": 1
+            }
+          ]
+        },
+        {
+          "entity_id": "CONTAINER_JANITOR_BUCKET",
+          "type": "Container",
+          "local_pos": {
+            "x": 1.2,
+            "y": -1.0,
+            "z": -1.5
+          },
+          "bounds": {
+            "x": 0.5,
+            "y": 0.5,
+            "z": 0.6
+          },
+          "items": []
+        }
+      ],
+      "enemies": [],
+      "connections": [
+        {
+          "connected_to": "RM_03_LAB_A",
+          "type": "One_Way_Shortcut_Handle",
+          "exit_vector": {
+            "x": 0.0,
+            "y": -1.9,
+            "z": 0.0
+          }
+        }
+      ],
+      "fixed_cameras": [
+        {
+          "camera_id": "CAM_JANITOR",
+          "position": {
+            "x": 1.5,
+            "y": -1.5,
+            "z": 3.0
+          },
+          "rotation_euler": {
+            "x": 45.0,
+            "y": 0.0,
+            "z": -135.0
+          }
+        }
+      ]
+    },
+    {
+      "room_id": "RM_04_PRINCIPAL",
+      "room_name": "Principal's Office Suite",
+      "progression_step": 3,
+      "objective_beat": "Solve the desk portrait puzzle to crack the security safe, retrieve the Master Keycard, and survive the admin ambush.",
+      "puzzle_gate_id": "PUZ_04_DESK_PORTRAIT_SAFE",
+      "dimensions": {
+        "width_x": 8.0,
+        "length_y": 8.0,
+        "height_z": 4.0
+      },
+      "center_position": {
+        "x": -7.0,
+        "y": 48.0,
+        "z": 2.0
+      },
+      "functional_entities": [
+        {
+          "entity_id": "PUZZLE_PAINTING_WALL",
+          "type": "Interactive_Console_Node",
+          "local_pos": {
+            "x": 0.0,
+            "y": 3.5,
+            "z": 0.0
+          },
+          "bounds": {
+            "x": 1.5,
+            "y": 0.2,
+            "z": 1.0
+          }
+        },
+        {
+          "entity_id": "SAFE_MASTER_SECURITY",
+          "type": "Puzzle_Container_Node",
+          "local_pos": {
+            "x": -3.2,
+            "y": 2.0,
+            "z": -1.0
+          },
+          "bounds": {
+            "x": 0.8,
+            "y": 0.8,
+            "z": 1.2
+          },
+          "items": [
+            {
+              "item_id": "key_faculty_wing",
+              "quantity": 1,
+              "tier": 2
+            },
+            {
+              "item_id": "ammo_magnum",
+              "quantity": 3,
+              "tier": 2
+            }
+          ]
+        },
+        {
+          "entity_id": "ITEM_MASTER_KEYCARD",
+          "type": "Key_Item_Node",
+          "local_pos": {
+            "x": -3.2,
+            "y": 2.0,
+            "z": -0.2
+          },
+          "bounds": {
+            "x": 0.3,
+            "y": 0.3,
+            "z": 0.3
+          }
+        },
+        {
+          "entity_id": "AMBUSH_ADMIN_SPAWN",
+          "type": "Enemy_Spawn_Node",
+          "local_pos": {
+            "x": 2.5,
+            "y": -2.0,
+            "z": -1.1
+          },
+          "bounds": {
+            "x": 0.8,
+            "y": 0.8,
+            "z": 1.8
+          }
+        },
+        {
+          "entity_id": "PROP_GLASS_PARTITION",
+          "type": "Destructible_Wall_Mesh",
+          "local_pos": {
+            "x": 3.5,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "bounds": {
+            "x": 0.1,
+            "y": 5.5,
+            "z": 3.5
+          }
+        },
+        {
+          "entity_id": "CONTAINER_EXECUTIVE_DESK",
+          "type": "Container",
+          "local_pos": {
+            "x": 0.0,
+            "y": 1.8,
+            "z": -1.2
+          },
+          "bounds": {
+            "x": 0.8,
+            "y": 0.6,
+            "z": 0.8
+          },
+          "items": [
+            {
+              "item_id": "healing_first_aid_spray",
+              "quantity": 1,
+              "tier": 2
+            }
+          ]
+        },
+        {
+          "entity_id": "CONTAINER_BOOKSHELF_HIDDEN",
+          "type": "Container",
+          "local_pos": {
+            "x": 3.2,
+            "y": 2.0,
+            "z": -1.0
+          },
+          "bounds": {
+            "x": 0.8,
+            "y": 1.5,
+            "z": 1.8
+          },
+          "items": []
+        },
+        {
+          "entity_id": "CONTAINER_CREDENZA_DRAWER",
+          "type": "Container",
+          "local_pos": {
+            "x": -3.2,
+            "y": -2.0,
+            "z": -1.5
+          },
+          "bounds": {
+            "x": 0.6,
+            "y": 0.6,
+            "z": 0.6
+          },
+          "items": []
+        },
+        {
+          "entity_id": "DOC_FOUNDER_SAFE_CLUE",
+          "type": "Document_Item_Node",
+          "title": "Principal's Diary Entry",
+          "content": "Personal Memo: The Master Security Keycard and emergency Magnum ammunition are locked inside the executive wall safe hidden behind the Founder's Oil Painting in this office suite.",
+          "icon": "\ud83d\udcdd"
+        }
+      ],
+      "enemies": [
+        {
+          "enemy_id": "zombie_principal_blocker",
+          "type": "Blocker_Zombie",
+          "behavior": "Guard_Safe",
+          "health": 120,
+          "spawn_position": {
+            "x": -2.5,
+            "y": 1.5,
+            "z": -1.2
+          }
+        }
+      ],
+      "connections": [
+        {
+          "connected_to": "HW_02_CENTRAL_CONCOURSE",
+          "type": "Standard_Interior_Door",
+          "exit_vector": {
+            "x": 4.9,
+            "y": -2.0,
+            "z": 0.0
+          }
+        }
+      ],
+      "fixed_cameras": [
+        {
+          "camera_id": "CAM_PRINCIPAL_DESK",
+          "position": {
+            "x": 3.0,
+            "y": 3.0,
+            "z": 3.2
+          },
+          "rotation_euler": {
+            "x": 20.0,
+            "y": 0.0,
+            "z": -135.0
+          }
+        }
+      ]
+    },
+    {
+      "room_id": "HW_03_LOADING_CORRIDOR",
+      "room_name": "Loading Bay Transit Corridor",
+      "progression_step": 4,
+      "objective_beat": "Swipe the Master Keycard to leave the school structure and enter the dark industrial transit hallway toward the docks.",
+      "dimensions": {
+        "width_x": 4.0,
+        "length_y": 12.0,
+        "height_z": 4.0
+      },
+      "center_position": {
+        "x": 0.0,
+        "y": 54.0,
+        "z": 2.0
+      },
+      "functional_entities": [
+        {
+          "entity_id": "CONTAINER_SECURITY_STATION_DESK",
+          "type": "Container",
+          "local_pos": {
+            "x": -1.2,
+            "y": -3.0,
+            "z": -1.2
+          },
+          "bounds": {
+            "x": 0.6,
+            "y": 0.6,
+            "z": 0.8
+          },
+          "items": [
+            {
+              "item_id": "ammo_shotgun_shells",
+              "quantity": 6,
+              "tier": 1
+            }
+          ]
+        },
+        {
+          "entity_id": "CONTAINER_TRANSIT_LOCKER",
+          "type": "Container",
+          "local_pos": {
+            "x": 1.2,
+            "y": 0.0,
+            "z": -1.0
+          },
+          "bounds": {
+            "x": 0.8,
+            "y": 0.5,
+            "z": 1.8
+          },
+          "items": [
+            {
+              "item_id": "ammo_handgun",
+              "quantity": 15,
+              "tier": 0
+            }
+          ]
+        },
+        {
+          "entity_id": "CONTAINER_TOOLBOX_HIGHWAY",
+          "type": "Container",
+          "local_pos": {
+            "x": -1.2,
+            "y": 2.5,
+            "z": -1.5
+          },
+          "bounds": {
+            "x": 0.5,
+            "y": 0.5,
+            "z": 0.5
+          },
+          "items": [
+            {
+              "item_id": "tool_wrench",
+              "quantity": 1,
+              "tier": 1
+            }
+          ]
+        },
+        {
+          "entity_id": "CONTAINER_CORRIDOR_CRATE",
+          "type": "Container",
+          "local_pos": {
+            "x": 1.2,
+            "y": 4.0,
+            "z": -1.5
+          },
+          "bounds": {
+            "x": 0.8,
+            "y": 0.8,
+            "z": 0.8
+          },
+          "items": []
+        }
+      ],
+      "enemies": [],
+      "connections": [
+        {
+          "connected_to": "HW_02_CENTRAL_CONCOURSE",
+          "type": "Master_Keycard_Door",
+          "exit_vector": {
+            "x": 0.0,
+            "y": -5.9,
+            "z": 0.0
+          }
+        },
+        {
+          "connected_to": "RM_05_LOADING_DOCK",
+          "type": "Exit_Transition_Threshold",
+          "exit_vector": {
+            "x": 0.0,
+            "y": 5.9,
+            "z": 0.0
+          }
+        }
+      ],
+      "fixed_cameras": [
+        {
+          "camera_id": "CAM_LOADING_CORRIDOR",
+          "position": {
+            "x": -1.5,
+            "y": -5.0,
+            "z": 3.5
+          },
+          "rotation_euler": {
+            "x": 15.0,
+            "y": 0.0,
+            "z": 20.0
+          }
+        }
+      ]
+    },
+    {
+      "room_id": "RM_05_LOADING_DOCK",
+      "room_name": "Loading Dock Yard (Final Apex)",
+      "progression_step": 4,
+      "objective_beat": "Reactivate the dock generator console, defend against the horde climax, open the motorized dock shutter, and escape on the harbor boat.",
+      "puzzle_gate_id": "PUZ_05_DOCK_GENERATOR",
+      "dimensions": {
+        "width_x": 16.0,
+        "length_y": 16.0,
+        "height_z": 8.0
+      },
+      "center_position": {
+        "x": 0.0,
+        "y": 68.0,
+        "z": 4.0
+      },
+      "functional_entities": [
+        {
+          "entity_id": "APEX_MOTORIZED_SHUTTER",
+          "type": "Animated_Gate_System",
+          "local_pos": {
+            "x": 0.0,
+            "y": 7.2,
+            "z": -1.0
+          },
+          "bounds": {
+            "x": 5.5,
+            "y": 0.4,
+            "z": 5.0
+          }
+        },
+        {
+          "entity_id": "CONSOLE_GENERATOR_BOARD",
+          "type": "Interactive_Console_Node",
+          "local_pos": {
+            "x": -6.5,
+            "y": -4.0,
+            "z": -3.0
+          },
+          "bounds": {
+            "x": 1.5,
+            "y": 1.0,
+            "z": 2.0
+          }
+        },
+        {
+          "entity_id": "SPAWN_HORDE_COMPACTOR",
+          "type": "Enemy_Spawn_Node",
+          "local_pos": {
+            "x": 6.5,
+            "y": 2.0,
+            "z": -3.1
+          },
+          "bounds": {
+            "x": 0.8,
+            "y": 0.8,
+            "z": 1.8
+          }
+        },
+        {
+          "entity_id": "SPAWN_HORDE_OVERHEAD",
+          "type": "Enemy_Spawn_Node",
+          "local_pos": {
+            "x": 0.0,
+            "y": -5.5,
+            "z": 2.0
+          },
+          "bounds": {
+            "x": 0.8,
+            "y": 0.8,
+            "z": 1.8
+          }
+        },
+        {
+          "entity_id": "CONTAINER_DOCKMASTER_SAFE",
+          "type": "Container",
+          "local_pos": {
+            "x": -6.5,
+            "y": 2.0,
+            "z": -3.0
+          },
+          "bounds": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.4
+          },
+          "items": [
+            {
+              "item_id": "weapon_magnum",
+              "quantity": 1,
+              "tier": 3
+            },
+            {
+              "item_id": "ammo_magnum",
+              "quantity": 4,
+              "tier": 2
+            }
+          ]
+        },
+        {
+          "entity_id": "CONTAINER_EMERGENCY_CACHE",
+          "type": "Container",
+          "local_pos": {
+            "x": 6.5,
+            "y": -4.0,
+            "z": -3.0
+          },
+          "bounds": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.4
+          },
+          "items": [
+            {
+              "item_id": "item_anti_virus_serum",
+              "quantity": 1,
+              "tier": 3
+            },
+            {
+              "item_id": "healing_first_aid_spray",
+              "quantity": 1,
+              "tier": 2
+            }
+          ]
+        },
+        {
+          "entity_id": "CONTAINER_CARGO_CRATE_01",
+          "type": "Container",
+          "local_pos": {
+            "x": 3.0,
+            "y": 4.0,
+            "z": -3.2
+          },
+          "bounds": {
+            "x": 0.8,
+            "y": 0.8,
+            "z": 0.8
+          },
+          "items": [
+            {
+              "item_id": "ammo_handgun",
+              "quantity": 20,
+              "tier": 0
+            }
+          ]
+        },
+        {
+          "entity_id": "CONTAINER_CARGO_CRATE_02",
+          "type": "Container",
+          "local_pos": {
+            "x": -3.0,
+            "y": 4.0,
+            "z": -3.2
+          },
+          "bounds": {
+            "x": 0.8,
+            "y": 0.8,
+            "z": 0.8
+          },
+          "items": []
+        },
+        {
+          "entity_id": "CONTAINER_SHIPPING_DRUM",
+          "type": "Container",
+          "local_pos": {
+            "x": 4.0,
+            "y": -6.0,
+            "z": -3.2
+          },
+          "bounds": {
+            "x": 0.6,
+            "y": 0.6,
+            "z": 1.0
+          },
+          "items": []
+        }
+      ],
+      "enemies": [
+        {
+          "enemy_id": "zombie_dock_heavy_blocker",
+          "type": "Heavy_Blocker_Zombie",
+          "behavior": "Guard_Generator",
+          "health": 250,
+          "spawn_position": {
+            "x": -5.0,
+            "y": -3.0,
+            "z": -3.0
+          }
+        }
+      ],
+      "connections": [
+        {
+          "connected_to": "HW_03_LOADING_CORRIDOR",
+          "type": "Standard_Interior_Door",
+          "exit_vector": {
+            "x": 0.0,
+            "y": -7.9,
+            "z": 0.0
+          }
+        }
+      ],
+      "fixed_cameras": [
+        {
+          "camera_id": "CAM_APEX_WIDE",
+          "position": {
+            "x": 0.0,
+            "y": -7.0,
+            "z": 6.5
+          },
+          "rotation_euler": {
+            "x": 35.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        {
+          "camera_id": "CAM_GATE_CLOSEUP",
+          "position": {
+            "x": -5.0,
+            "y": 6.5,
+            "z": 2.0
+          },
+          "rotation_euler": {
+            "x": 10.0,
+            "y": 0.0,
+            "z": 45.0
+          }
+        }
+      ]
+    }
+  ]
+}
