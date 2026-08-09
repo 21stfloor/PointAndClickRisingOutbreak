@@ -1,0 +1,1138 @@
+{
+  "buildings": [
+    {
+      "id": 1,
+      "name": "Peridor's Academy",
+      "buildingType": "EDUCATIONAL",
+      "specificBuildingType": "school",
+      "openingTimes": {
+        "closedDays": [],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 2,
+      "name": "The Glyngal Academy",
+      "buildingType": "EDUCATIONAL",
+      "specificBuildingType": "school",
+      "openingTimes": {
+        "closedDays": [],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 3,
+      "name": "Community Center of Ozean",
+      "buildingType": "COMMUNITY",
+      "specificBuildingType": "community chapel",
+      "description": "Community center dedicated to Ozean",
+      "openingTimes": {
+        "closedDays": [],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 4,
+      "name": "Lemtarn's Academy",
+      "buildingType": "EDUCATIONAL",
+      "specificBuildingType": "school",
+      "openingTimes": {
+        "closedDays": [],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 5,
+      "name": "Masons Co-Working Hub",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "coworking space",
+      "notes": null
+    },
+    {
+      "id": 6,
+      "name": "The Sparkling Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 7,
+      "name": "The Hungry Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 8,
+      "name": "The Green Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 9,
+      "name": "The Flawless Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 10,
+      "name": "The Grandiose Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 11,
+      "name": "The Shimmering Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 12,
+      "name": "The Neon Castle Nightclub",
+      "buildingType": "ENTERTAINMENT",
+      "specificBuildingType": "nightclub",
+      "openingTimes": {
+        "closedDays": [],
+        "openHour": 11,
+        "closeHour": 1
+      },
+      "notes": null
+    },
+    {
+      "id": 13,
+      "name": "The Artisanal Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 14,
+      "name": "The Zaile Birch Logistics Solutions",
+      "buildingType": "INDUSTRIAL",
+      "specificBuildingType": "logistics hub",
+      "notes": null
+    },
+    {
+      "id": 15,
+      "name": "The Ethereal Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 16,
+      "name": "The Anferas Timber Processing",
+      "buildingType": "INDUSTRIAL",
+      "specificBuildingType": "timber processing plant",
+      "notes": null
+    },
+    {
+      "id": 17,
+      "name": "The Enormous Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 18,
+      "name": "Sanctuary of Ihsus",
+      "buildingType": "COMMUNITY",
+      "specificBuildingType": "community chapel",
+      "description": "Sanctuary dedicated to Ihsus",
+      "openingTimes": {
+        "closedDays": [],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 19,
+      "name": "The Peaceful Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 20,
+      "name": "The Dazzling Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 21,
+      "name": "The Silver Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 22,
+      "name": "The Penitent Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 23,
+      "name": "The Elaborate Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 24,
+      "name": "The Peaceful Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 25,
+      "name": "The Enormous Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 26,
+      "name": "The Golden Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 27,
+      "name": "The Hungry Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 28,
+      "name": "The Twinkling Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 29,
+      "name": "The Respected Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 30,
+      "name": "The Exquisite Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 31,
+      "name": "The Pious Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 32,
+      "name": "The Bright Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 33,
+      "name": "The Beautiful Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 34,
+      "name": "The Renowned Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 35,
+      "name": "The Whimsical Toad Weaver Textile Factory",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "textile factory",
+      "description": "Average quality cloth maker",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 36,
+      "name": "Kortael's Furrier Boutique Fashion House",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "boutique fashion house",
+      "description": "Average quality furrier",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 37,
+      "name": "The Scintillating Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 38,
+      "name": "Trem's Launderer Dry Cleaners",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "dry cleaners",
+      "description": "Average quality laundry cleaner",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 39,
+      "name": "Opulent Seed Pharmacy",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "pharmacy",
+      "description": "Average quality herbalist",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 40,
+      "name": "The Sweet Cheese maker",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "artisanal creamery",
+      "description": "Average quality cheese maker",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 41,
+      "name": "The Carquel Potter Ceramics Studio",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "ceramics studio",
+      "description": "Average quality potter",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 42,
+      "name": "The Whimsical Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 43,
+      "name": "The Soothing Papermaker",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "stationery manufacturer",
+      "description": "Average quality papermaker",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 44,
+      "name": "The Green Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 45,
+      "name": "The Handsome Gaming Hub",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "electronics and gaming store",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 46,
+      "name": "The Ornate Perfumer Fragrance Boutique",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "fragrance boutique",
+      "description": "Good quality perfumer",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 47,
+      "name": "The Shimmering Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 48,
+      "name": "The Splendid Pony Jeweler Jewelry Store",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "jewelry store",
+      "description": "Average quality jeweler",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 49,
+      "name": "The Opulent Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 50,
+      "name": "The Shimmering Baker Bakery",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "bakery",
+      "description": "Great quality baker",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 51,
+      "name": "The White Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 52,
+      "name": "Chieftain Ores Metal Supplier",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "metal supplier",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 53,
+      "name": "The Stunning Masonry Supply",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "masonry supplier",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 54,
+      "name": "The Expert Potter Ceramics Studio",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "ceramics studio",
+      "description": "Great quality potter",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 55,
+      "name": "The Impeccable Weaver Textile Factory",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "textile factory",
+      "description": "Average quality cloth maker",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 56,
+      "name": "Varmyr's Barber Barbershop",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "barbershop",
+      "description": "Great quality barber",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 57,
+      "name": "The Fine Loom Textile Mill",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "textile mill",
+      "description": "Average quality spinner of yarn",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 58,
+      "name": "The Masculine Leather Atelier",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "leather apparel boutique",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 59,
+      "name": "Carquel's Lanternmaker",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "lighting fixture manufacturer",
+      "description": "Average quality lanternmaker",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 60,
+      "name": "Lake Hardware Co.",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "hardware store",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 61,
+      "name": "The Educated Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 62,
+      "name": "The Graceful Tanner Leather Tannery",
+      "buildingType": "INDUSTRIAL",
+      "specificBuildingType": "leather tannery",
+      "description": "Good quality tanner",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 63,
+      "name": "Wood Commercial Laundry",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "dry cleaners",
+      "description": "Average quality laundry cleaner",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 64,
+      "name": "Ovelleau's Leather Works Protective Gear Developer",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "protective gear developer",
+      "description": "Good quality leather worker",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 65,
+      "name": "The Eminent Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 66,
+      "name": "Horseman Fresh Foods Co.",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "supermarket",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 67,
+      "name": "The Acclaimed Miller Grain Processing Facility",
+      "buildingType": "INDUSTRIAL",
+      "specificBuildingType": "grain processing facility",
+      "description": "Master quality mill for grinding grain",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 68,
+      "name": "Quinid's Stone-cutter Stone Cutting Facility",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "stone cutting facility",
+      "description": "Average quality stone-cutter/shaper",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 69,
+      "name": "The Twinkling Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 70,
+      "name": "Jeweled Game Recreation Center",
+      "buildingType": "INDUSTRIAL",
+      "specificBuildingType": "recreation center",
+      "notes": null
+    },
+    {
+      "id": 71,
+      "name": "The Bottomless Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 72,
+      "name": "The Admired Cobbler Lanternmaker",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "lighting fixture manufacturer",
+      "description": "Great quality lanternmaker",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 73,
+      "name": "Ezmi's Tanner Leather Tannery",
+      "buildingType": "INDUSTRIAL",
+      "specificBuildingType": "leather tannery",
+      "description": "Master quality tanner",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 74,
+      "name": "The Stunning Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 75,
+      "name": "The Worried Game Recreation Center",
+      "buildingType": "INDUSTRIAL",
+      "specificBuildingType": "recreation center",
+      "notes": null
+    },
+    {
+      "id": 76,
+      "name": "Admired Urn Ceramics Studio",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "ceramics studio",
+      "description": "Good quality potter",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 77,
+      "name": "The Stylish Apron Bakery",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "bakery",
+      "description": "Great quality baker",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 78,
+      "name": "Brala's Furrier Boutique Fashion House",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "boutique fashion house",
+      "description": "Good quality furrier",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 79,
+      "name": "Nelat's Brewery Microbrewery",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "microbrewery",
+      "description": "Good quality brewery",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 80,
+      "name": "The Grandiose Merchant Express Mart",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "convenience store",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 81,
+      "name": "The Wrinkled Master Rugmaker",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "carpet manufacture studio",
+      "description": "Master quality rugmaker",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 82,
+      "name": "Metro Vertical Farm",
+      "buildingType": "AGRICULTURAL",
+      "specificBuildingType": "urban vertical farm",
+      "notes": null
+    },
+    {
+      "id": 83,
+      "name": "The Luxurious Carpenter Furniture Workshop",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "furniture workshop",
+      "description": "Great quality carpenter",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 84,
+      "name": "Trim Cutting Barbershop",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "barbershop",
+      "description": "Average quality barber",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 85,
+      "name": "Polished Kitchenware Convenience Store",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "convenience store",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 86,
+      "name": "The Superior Ocean Spinner Textile Mill",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "textile mill",
+      "description": "Good quality spinner of yarn",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 87,
+      "name": "The Glittering Greengrocery Organic Produce Market",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "organic produce market",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 88,
+      "name": "The Long Halfling Carder Fiber Processing Workshop",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "fiber processing workshop",
+      "description": "Good quality carder of fibres",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 89,
+      "name": "Bleach bleaching Chemical Treatment Plant",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "chemical treatment plant",
+      "description": "Great quality bleacher",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 90,
+      "name": "The Lustrous Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 91,
+      "name": "Metro Vertical Farm",
+      "buildingType": "AGRICULTURAL",
+      "specificBuildingType": "urban vertical farm",
+      "notes": null
+    },
+    {
+      "id": 92,
+      "name": "The Long Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 93,
+      "name": "Cleanly Loafer Shoe Repair Shop",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "shoe repair shop",
+      "description": "Average quality cobbler - who repairs shoes.",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 94,
+      "name": "The Cleanly Express Mart",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "convenience store",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 95,
+      "name": "The Serene Parchment Maker Paper Mill",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "paper mill",
+      "description": "Average quality parchment maker",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 96,
+      "name": "Metro Vertical Farm",
+      "buildingType": "AGRICULTURAL",
+      "specificBuildingType": "urban vertical farm",
+      "notes": null
+    },
+    {
+      "id": 97,
+      "name": "Gray Mussel Seafood Market",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "seafood market",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 98,
+      "name": "Badger Fruits Organic Produce Market",
+      "buildingType": "COMMERCIAL",
+      "specificBuildingType": "organic produce market",
+      "openingTimes": {
+        "closedDays": [
+          6,
+          7
+        ],
+        "openHour": 9,
+        "closeHour": 17
+      },
+      "notes": null
+    },
+    {
+      "id": 99,
+      "name": "The Resplendent Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    },
+    {
+      "id": 100,
+      "name": "The Flawless Apartments",
+      "buildingType": "RESIDENTIAL",
+      "specificBuildingType": "apartment building",
+      "notes": null
+    }
+  ]
+}

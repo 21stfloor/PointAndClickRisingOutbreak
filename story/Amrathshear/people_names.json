@@ -1,0 +1,74 @@
+[
+  {
+    "id": 3623,
+    "firstName": "Alice",
+    "lastName": "Vernon",
+    "gender": "female",
+    "age": 87,
+    "occupation": "Retired Archivist",
+    "appearance": {
+      "heightCm": 161
+    },
+    "coreValues": {
+      "extroversion": 2,
+      "conscientiousness": 1,
+      "openness": 3,
+      "agreeableness": 0,
+      "neuroticism": 0
+    },
+    "personality": null,
+    "religion": "N/A",
+    "placeOfResidence": 418,
+    "notes": "",
+    "childInFamilies": [],
+    "parentInFamilies": []
+  },
+  {
+    "id": 3624,
+    "firstName": "Eleanor",
+    "lastName": "Ambrose",
+    "gender": "female",
+    "age": 85,
+    "occupation": "Retired Clinical Nurse",
+    "appearance": {
+      "heightCm": 162
+    },
+    "coreValues": {
+      "extroversion": 0,
+      "conscientiousness": 1,
+      "openness": 0,
+      "agreeableness": 3,
+      "neuroticism": 1
+    },
+    "personality": null,
+    "religion": "N/A",
+    "placeOfResidence": 418,
+    "notes": "",
+    "childInFamilies": [],
+    "parentInFamilies": []
+  },
+  {
+    "id": 3625,
+    "firstName": "Marcus",
+    "lastName": "Taylor",
+    "gender": "male",
+    "age": 75,
+    "occupation": "Retired Security Supervisor",
+    "appearance": {
+      "heightCm": 190
+    },
+    "coreValues": {
+      "extroversion": 3,
+      "conscientiousness": 4,
+      "openness": 2,
+      "agreeableness": 2,
+      "neuroticism": 1
+    },
+    "personality": null,
+    "religion": "N/A",
+    "placeOfResidence": 418,
+    "notes": "",
+    "childInFamilies": [],
+    "parentInFamilies": []
+  }
+]
