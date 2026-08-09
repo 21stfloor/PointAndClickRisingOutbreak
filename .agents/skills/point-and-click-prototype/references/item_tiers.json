@@ -1,0 +1,291 @@
+{
+  "meta": {
+    "schema_version": "1.0",
+    "game_style_reference": "Resident Evil Outbreak",
+    "level_name": "Blackwood High Incident",
+    "progression_map": {
+      "1": "Alley",
+      "2": "School - Ground Floor / Classrooms",
+      "3": "School - Faculty Wing / Basement",
+      "4": "Docks"
+    }
+  },
+  "tiers": {
+    "0": {
+      "name": "Basics & Trash",
+      "description": "High-frequency filler items. Keeps the player moving, never solves a real threat.",
+      "spawn_rate": "high",
+      "spawn_weight": 50
+    },
+    "1": {
+      "name": "Early Upgrades",
+      "description": "First meaningful power spike. Common enough to find but requires exploration.",
+      "spawn_rate": "moderate",
+      "spawn_weight": 30
+    },
+    "2": {
+      "name": "Power Items & Key Progression",
+      "description": "Scarce, often gated behind puzzles or key items. Tied to mid-game threats.",
+      "spawn_rate": "low",
+      "spawn_weight": 15
+    },
+    "3": {
+      "name": "End-Game / High Threat",
+      "description": "Extremely rare, mostly scripted or boss-locked. Not meant to be found by browsing.",
+      "spawn_rate": "extremely_restricted",
+      "spawn_weight": 5
+    }
+  },
+  "items": [
+    {
+      "item_id": "ammo_handgun",
+      "display_name": "Handgun Rounds",
+      "tier": 0,
+      "category": "ammo",
+      "stack_size": 30,
+      "default_spawn_quantity": { "min": 6, "max": 15 },
+      "allowed_progression_steps": [1, 2, 3, 4]
+    },
+    {
+      "item_id": "wooden_planks",
+      "display_name": "Wooden Plank",
+      "tier": 0,
+      "category": "utility",
+      "stack_size": 5,
+      "default_spawn_quantity": { "min": 1, "max": 3 },
+      "allowed_progression_steps": [1, 2]
+    },
+    {
+      "item_id": "bandages",
+      "display_name": "Bandages",
+      "tier": 0,
+      "category": "healing",
+      "stack_size": 10,
+      "default_spawn_quantity": { "min": 1, "max": 2 },
+      "allowed_progression_steps": [1, 2, 3, 4]
+    },
+    {
+      "item_id": "key_alley_padlock",
+      "display_name": "Rusted Padlock Key",
+      "tier": 0,
+      "category": "progression",
+      "stack_size": 1,
+      "default_spawn_quantity": 1,
+      "allowed_progression_steps": [1]
+    },
+    {
+      "item_id": "flashlight_battery",
+      "display_name": "Battery Pack",
+      "tier": 0,
+      "category": "utility",
+      "stack_size": 5,
+      "default_spawn_quantity": { "min": 1, "max": 2 },
+      "allowed_progression_steps": [1, 2, 3, 4]
+    },
+    {
+      "item_id": "cloth_scrap",
+      "display_name": "Cloth Scrap",
+      "tier": 0,
+      "category": "utility",
+      "stack_size": 10,
+      "default_spawn_quantity": { "min": 1, "max": 3 },
+      "allowed_progression_steps": [1, 2]
+    },
+    {
+      "item_id": "weapon_handgun",
+      "display_name": "9mm Handgun",
+      "tier": 1,
+      "category": "weapon",
+      "stack_size": 1,
+      "default_spawn_quantity": 1,
+      "allowed_progression_steps": [1, 2]
+    },
+    {
+      "item_id": "herb_green",
+      "display_name": "Green Herb",
+      "tier": 1,
+      "category": "healing",
+      "stack_size": 3,
+      "default_spawn_quantity": { "min": 1, "max": 2 },
+      "allowed_progression_steps": [1, 2, 3, 4]
+    },
+    {
+      "item_id": "ammo_shotgun_shells",
+      "display_name": "Shotgun Shells",
+      "tier": 1,
+      "category": "ammo",
+      "stack_size": 20,
+      "default_spawn_quantity": { "min": 3, "max": 6 },
+      "allowed_progression_steps": [2, 3, 4]
+    },
+    {
+      "item_id": "tool_lockpick",
+      "display_name": "Lockpick Set",
+      "tier": 1,
+      "category": "utility",
+      "stack_size": 1,
+      "default_spawn_quantity": 1,
+      "allowed_progression_steps": [1, 2]
+    },
+    {
+      "item_id": "tool_wrench",
+      "display_name": "Pipe Wrench",
+      "tier": 1,
+      "category": "utility",
+      "stack_size": 1,
+      "default_spawn_quantity": 1,
+      "allowed_progression_steps": [3, 4]
+    },
+    {
+      "item_id": "key_classroom_master",
+      "display_name": "Classroom Master Key",
+      "tier": 1,
+      "category": "progression",
+      "stack_size": 1,
+      "default_spawn_quantity": 1,
+      "allowed_progression_steps": [2]
+    },
+    {
+      "item_id": "weapon_shotgun",
+      "display_name": "Pump-Action Shotgun",
+      "tier": 2,
+      "category": "weapon",
+      "stack_size": 1,
+      "default_spawn_quantity": 1,
+      "allowed_progression_steps": [2, 3]
+    },
+    {
+      "item_id": "healing_first_aid_spray",
+      "display_name": "First Aid Spray",
+      "tier": 2,
+      "category": "healing",
+      "stack_size": 3,
+      "default_spawn_quantity": { "min": 1, "max": 1 },
+      "allowed_progression_steps": [2, 3, 4]
+    },
+    {
+      "item_id": "ammo_magnum",
+      "display_name": "Magnum Rounds",
+      "tier": 2,
+      "category": "ammo",
+      "stack_size": 10,
+      "default_spawn_quantity": { "min": 2, "max": 4 },
+      "allowed_progression_steps": [3, 4]
+    },
+    {
+      "item_id": "herb_combined_green_red",
+      "display_name": "Mixed Herb (G+R)",
+      "tier": 2,
+      "category": "healing",
+      "stack_size": 3,
+      "default_spawn_quantity": 1,
+      "allowed_progression_steps": [2, 3, 4]
+    },
+    {
+      "item_id": "herb_combined_green_blue",
+      "display_name": "Mixed Herb (G+B)",
+      "tier": 2,
+      "category": "healing",
+      "stack_size": 3,
+      "default_spawn_quantity": 1,
+      "allowed_progression_steps": [2, 3]
+    },
+    {
+      "item_id": "key_faculty_wing",
+      "display_name": "Faculty Wing Security Key",
+      "tier": 2,
+      "category": "progression",
+      "stack_size": 1,
+      "default_spawn_quantity": 1,
+      "allowed_progression_steps": [3]
+    },
+    {
+      "item_id": "key_docks_master",
+      "display_name": "Dockmaster's Key",
+      "tier": 2,
+      "category": "progression",
+      "stack_size": 1,
+      "default_spawn_quantity": 1,
+      "allowed_progression_steps": [4]
+    },
+    {
+      "item_id": "weapon_magnum",
+      "display_name": ".357 Magnum Revolver",
+      "tier": 3,
+      "category": "weapon",
+      "stack_size": 1,
+      "default_spawn_quantity": 1,
+      "allowed_progression_steps": [4]
+    },
+    {
+      "item_id": "weapon_grenade_launcher",
+      "display_name": "Grenade Launcher",
+      "tier": 3,
+      "category": "weapon",
+      "stack_size": 1,
+      "default_spawn_quantity": 1,
+      "allowed_progression_steps": [3]
+    },
+    {
+      "item_id": "weapon_rocket_launcher",
+      "display_name": "Rocket Launcher",
+      "tier": 3,
+      "category": "weapon",
+      "stack_size": 1,
+      "default_spawn_quantity": 1,
+      "allowed_progression_steps": [4]
+    },
+    {
+      "item_id": "item_anti_virus_serum",
+      "display_name": "Anti-Virus Serum",
+      "tier": 3,
+      "category": "progression",
+      "stack_size": 1,
+      "default_spawn_quantity": 1,
+      "allowed_progression_steps": [3, 4]
+    },
+    {
+      "item_id": "item_daylight_cure_vial",
+      "display_name": "Experimental Cure Vial",
+      "tier": 3,
+      "category": "progression",
+      "stack_size": 1,
+      "default_spawn_quantity": 1,
+      "allowed_progression_steps": [4]
+    }
+  ],
+  "budget_constraints": {
+    "max_total_weapons_per_level": 6,
+    "max_tier2_items_per_level": 8,
+    "max_tier3_items_per_level": 3,
+    "target_container_emptiness_percentage": { "min": 50, "max": 60 },
+    "max_healing_items_per_level": 12,
+    "max_key_items_per_level": 6,
+    "per_area_budget": {
+      "alley": {
+        "progression_step": 1,
+        "max_tier": 0,
+        "notes": "Introductory area. Tier 0 and Tier 1 weapon pickup only, establishes scarcity tone."
+      },
+      "school": {
+        "progression_steps": [2, 3],
+        "max_tier": 2,
+        "notes": "Primary mid-game hub. Tier 2 items gated behind locked classrooms/faculty wing puzzles."
+      },
+      "docks": {
+        "progression_step": 4,
+        "max_tier": 3,
+        "notes": "Finale area. Tier 3 items are scripted/boss-adjacent, not freely looted from containers."
+      }
+    },
+    "container_rules": {
+      "empty_container_ratio_by_area": {
+        "alley": 0.65,
+        "school": 0.55,
+        "docks": 0.50
+      },
+      "duplicate_high_tier_drop_cooldown_containers": 5,
+      "notes": "Emptiness ratio decreases as player progresses to sustain tension curve while ensuring late-game survivability."
+    }
+  }
+}
