@@ -2065,6 +2065,9 @@
           btn.textContent = `📷 ${c.label}`;
           btn.addEventListener('click', () => {
             playSound('click');
+            if (state.isSwapping) {
+              cancelItemSwapping();
+            }
             state.currentCamIndex = idx;
             renderRoom();
           });
@@ -2690,6 +2693,9 @@
     // --- ROOM NAVIGATION ---
     function changeRoom(roomId) {
       if (state.playerHp <= 0) return;
+      if (state.isSwapping) {
+        cancelItemSwapping();
+      }
       state.currentRoomId = roomId;
       state.currentCamIndex = 0;
       state.visitedRooms.add(roomId);

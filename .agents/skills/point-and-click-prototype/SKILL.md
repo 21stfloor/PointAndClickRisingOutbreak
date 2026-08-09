@@ -28,7 +28,7 @@ Generates a complete, zero-dependency, single-file HTML5/JavaScript interactive 
    - Key items and tools (keys, keycards, lockpicks, fuses, chemical agents) must be used on specific targets.
    - When examining a key item in inventory, render a **Target Dropdown Menu** listing all visible interactables/doors in the active camera view.
    - Clicking "🔑 Use Item on Target":
-     - If the item matches the target's `required_key`, it permanently unlocks/activates the target, logs a success event (`🔓 SUCCESS: Used [🔑 Key] on [Door]!`), and removes single-use items.
+     - If the item matches the target's `required_key` (case-insensitive evaluation), it permanently unlocks/activates the target, logs a success event (`🔓 SUCCESS: Used [🔑 Key] on [Door]!`), and removes single-use items.
      - If the item does not match the target, it logs an explicit failure event (`❌ FAILED: Cannot use [🔑 Key] on [Desk]. It has no effect!`).
 5. **Persistent Unlocked Doors & Explicit Key Usage:**
    - Doors requiring keys CANNOT be navigated by clicking directly on them, even if the key is held in inventory.
@@ -42,6 +42,7 @@ Generates a complete, zero-dependency, single-file HTML5/JavaScript interactive 
      - **Container/Ground Exchange Rule:** The swapped-out inventory item replaces the picked-up item inside its original container or ground hotspot! The old item is NOT lost; it remains stored in the container/hotspot so the player can return and pick it up again later.
    - **Picking Cancellation:** The player can cancel picking/swapping via ESC, right-click, or a "Cancel Pick" button.
    - **Zombie Combat Interrupt:** If a zombie attacks the player while in picking/swapping mode, picking is automatically cancelled!
+   - **Screen / Camera View Change Interrupt:** If the player changes screens, switches camera perspectives (`cam-btn`), or navigates to another room (`changeRoom`) while in picking/swapping mode (`state.isSwapping`), item picking is automatically cancelled (`cancelItemSwapping()`)!
 
 ### Step 3: Diegetic 2D Floor Map Canvas & Map Item Requirement
 1. **Map Item Required:**
