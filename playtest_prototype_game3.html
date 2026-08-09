@@ -1312,14 +1312,9 @@
 
       if (hs.type === 'door') {
         if (hs.required_key && !state.unlockedDoors.has(hs.id)) {
-          const hasKey = state.inventory.some(i => i.item_id === hs.required_key);
-          if (!hasKey) {
-            playSound('locked');
-            addLog(`🔒 Door Locked! Access to [${hs.name}] requires key item: [${hs.required_key}]. Inspect key in inventory to use target selector!`, 'warning');
-            return;
-          }
-          state.unlockedDoors.add(hs.id);
-          addLog(`🔓 Unlocked [${hs.name}] using key item! Door remains permanently unlocked.`, 'success');
+          playSound('locked');
+          addLog(`🔒 Locked Door! Access to [${hs.name}] is locked. Inspect key item [${hs.required_key}] in your 5-slot inventory and select 'Use Item on Target' to unlock this door!`, 'warning');
+          return;
         }
 
         playSound('door');

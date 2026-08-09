@@ -32,8 +32,10 @@ Generates a complete, zero-dependency, single-file HTML5/JavaScript interactive 
    - Clicking "🔑 Use Item on Target":
      - If the item matches the target's `required_key`, it permanently unlocks/activates the target, logs a success event (`🔓 SUCCESS: Used [🔑 Key] on [Door]!`), and removes single-use items.
      - If the item does not match the target, it logs an explicit failure event (`❌ FAILED: Cannot use [🔑 Key] on [Desk]. It has no effect!`).
-5. **Persistent Unlocked Doors:**
-   - Unlocked doors are saved in `state.unlockedDoors = new Set()`. Once unlocked, doors stay permanently unlocked and do not require key checks on subsequent clicks.
+5. **Persistent Unlocked Doors & Explicit Key Usage:**
+   - Doors requiring keys CANNOT be navigated by clicking directly on them, even if the key is held in inventory.
+   - The player MUST inspect the key item in their inventory and select "Use Item on Target" targeting the door to unlock it.
+   - Unlocked doors are saved in `state.unlockedDoors = new Set()`. Once explicitly unlocked via inventory item usage, doors stay permanently unlocked and can be traversed freely.
 6. **Item Swapping & World Container Exchange:**
    - When picking up a new item while the inventory is at capacity (5 items):
      - The mouse cursor transforms into a **Hand Icon** to indicate picking/swapping mode.
