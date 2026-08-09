@@ -1021,8 +1021,8 @@
         ctx.restore();
       });
 
-      // RENDER ANIMATED ZOMBIE APPROACH & ATTACK OVERLAY
-      const activeEnemies = (room.enemies || []).filter(e => !state.neutralizedEnemies.has(e.id));
+      // RENDER ANIMATED ZOMBIE APPROACH & ATTACK OVERLAY (ONLY FOR ACTIVE CAMERA ANGLE!)
+      const activeEnemies = (room.enemies || []).filter(e => !state.neutralizedEnemies.has(e.id) && (e.camIndex ?? 0) === state.currentCamIndex);
       if (activeEnemies.length > 0) {
         const currentZombieImg = state.zombieAttacking ? zombieAttackImg : zombieNormalImg;
         if (currentZombieImg.complete) {
@@ -1051,7 +1051,8 @@
     setInterval(() => {
       const room = GAME_DATA.rooms[state.currentRoomId];
       if (!room) return;
-      const activeEnemies = (room.enemies || []).filter(e => !state.neutralizedEnemies.has(e.id));
+      // Zombie advances ONLY when player is looking at the zombie's camera screen!
+      const activeEnemies = (room.enemies || []).filter(e => !state.neutralizedEnemies.has(e.id) && (e.camIndex ?? 0) === state.currentCamIndex);
 
       if (activeEnemies.length > 0 && state.playerHp > 0) {
         if (!state.zombieAttacking) {
@@ -1108,20 +1109,30 @@
     function renderThreatPanel() {
       const room = GAME_DATA.rooms[state.currentRoomId];
       const panel = document.getElementById('threatPanel');
-      const activeEnemies = (room.enemies || []).filter(e => !state.neutralizedEnemies.has(e.id));
+      const roomEnemies = (room.enemies || []).filter(e => !state.neutralizedEnemies.has(e.id));
 
-      if (activeEnemies.length === 0) {
+      if (roomEnemies.length === 0) {
         document.getElementById('threatStatus').textContent = "Sector Clear";
         document.getElementById('threatStatus').style.color = "var(--accent-green)";
         panel.innerHTML = `<div style="font-size:0.78rem; color:var(--text-muted);">No active threats in this sector.</div>`;
         return;
       }
 
-      document.getElementById('threatStatus').textContent = `${activeEnemies.length} Creeping Threat!`;
+      // Check if enemy is on current camera view
+      const activeEnemiesOnCam = roomEnemies.filter(e => (e.camIndex ?? 0) === state.currentCamIndex);
+
+      if (activeEnemiesOnCam.length === 0) {
+        document.getElementById('threatStatus').textContent = "Threat In Sector (Out of Sight)";
+        document.getElementById('threatStatus').style.color = "var(--accent-gold)";
+        panel.innerHTML = `<div style="font-size:0.78rem; color:var(--accent-gold);">⚠️ Threat lurking in another camera view of this room! Change camera perspective to engage.</div>`;
+        return;
+      }
+
+      document.getElementById('threatStatus').textContent = `${activeEnemiesOnCam.length} Creeping Threat!`;
       document.getElementById('threatStatus').style.color = "var(--accent-red)";
       panel.innerHTML = '';
 
-      activeEnemies.forEach(e => {
+      activeEnemiesOnCam.forEach(e => {
         const card = document.createElement('div');
         card.className = 'threat-card';
         card.innerHTML = `

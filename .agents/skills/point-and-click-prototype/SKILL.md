@@ -35,16 +35,19 @@ Generates a complete, zero-dependency, single-file HTML5/JavaScript interactive 
    - **Picking Cancellation:** The player can cancel the picking/swapping state at any time via ESC, right-click, or a "Cancel Pick" button.
    - **Zombie Combat Interrupt:** If a zombie attacks the player while in picking/swapping mode, the picking action is automatically interrupted and cancelled!
 
-### Step 3: Zombie Threat Animations & Combat Mechanics
-1. **Animated Approach (`zombie_transparent.png`):**
-   - When a zombie threat is active in a room, render `zombie_transparent.png` overlaid on the room viewport.
-   - Scale the zombie image up gradually over time to visually represent the zombie creeping/advancing closer to the player.
-2. **Attacking Frame (`zombie_attack_transparent.png`):**
+### Step 3: Camera-Gated Zombie Threats & Combat Mechanics
+1. **Single Camera Angle Binding:**
+   - Zombies and enemies are bound to exactly ONE specific camera angle (`camIndex`) in a room.
+   - The zombie sprite overlay appears and advances towards attack ONLY when the player is actively viewing its designated camera angle. Switching to another camera angle in the room hides the zombie from the viewport.
+2. **Animated Approach (`zombie_transparent.png`):**
+   - When viewing the camera angle containing an active zombie, render `zombie_transparent.png` overlaid on the room viewport.
+   - Scale the zombie image up gradually over time to visually represent the zombie creeping/advancing closer to the player on that camera view.
+3. **Attacking Frame (`zombie_attack_transparent.png`):**
    - When the zombie reaches attack range or strikes, swap the sprite to `zombie_attack_transparent.png` to show the attack frame.
    - Inflict damage on player HP and trigger a camera shake/blood flash, then revert back to default state or retreat.
    - **Interruption:** Any active item picking or inventory swapping process is immediately interrupted and cancelled when a zombie attack hits.
-3. **Weapon Defense:**
-   - Equipping weapons (Handgun, Shotgun, Magnum) and spending ammo lets the player shoot approaching zombies before they reach attack range.
+4. **Weapon Defense:**
+   - Equipping weapons (Handgun, Shotgun, Magnum) and spending ammo lets the player shoot approaching zombies when viewing their camera screen.
 
 ### Step 4: NPC Placement & Safe Room Rules
 1. **No NPCs in Hallways:** NPCs are strictly prohibited in transit hallways or corridors.
