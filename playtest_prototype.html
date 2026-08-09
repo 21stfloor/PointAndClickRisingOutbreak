@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Point-and-Click Playtest Prototype: Blackwood High Incident</title>
+  <style>
+    :root {
+      --bg-dark: #0a0c10;
+      --panel-bg: rgba(18, 22, 30, 0.92);
+      --border-color: #2a3445;
+      --accent-color: #e63946;
+      --accent-gold: #f4a261;
+      --accent-green: #2a9d8f;
+      --accent-blue: #457b9d;
+      --text-main: #e0e6ed;
+      --text-muted: #8a99ad;
+      --font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Top Bar */
+    header {
+      height: 50px;
+      background: #0f131a;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 10;
+    }
+
+    .game-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .game-title .badge {
+      background: var(--accent-color);
+      color: white;
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .header-controls {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      background: #1c2331;
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn:hover {
+      background: #283246;
+      border-color: var(--accent-blue);
+      color: #fff;
+    }
+
+    .btn-danger {
+      border-color: rgba(230, 57, 70, 0.4);
+    }
+    .btn-danger:hover {
+      background: var(--accent-color);
+      border-color: var(--accent-color);
+    }
+
+    /* Main Container */
+    .game-layout {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      grid-template-rows: 1fr 220px;
+      grid-template-areas:
+        "viewport sidebar"
+        "log sidebar";
+      gap: 12px;
+      padding: 12px;
+      height: calc(100vh - 50px);
+    }
+
+    /* Viewport Area */
+    .viewport-container {
+      grid-area: viewport;
+      position: relative;
+      background: #000;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #gameCanvas {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .room-overlay-header {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: rgba(10, 12, 16, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border-color);
+      padding: 10px 16px;
+      border-radius: 6px;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .room-name {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .room-objective {
+      font-size: 0.82rem;
+      color: var(--accent-gold);
+      margin-top: 4px;
+    }
+
+    .progression-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(10, 12, 16, 0.85);
+      border: 1px solid var(--border-color);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      z-index: 5;
+    }
+
+    .progression-badge span {
+      color: var(--accent-green);
+      font-weight: 700;
+    }
+
+    /* Tooltip */
+    #tooltip {
+      position: absolute;
+      background: rgba(15, 19, 26, 0.95);
+      color: #fff;
+      border: 1px solid var(--accent-blue);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      pointer-events: none;
+      z-index: 100;
+      display: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      transform: translate(-50%, -120%);
+    }
+
+    /* Sidebar Area */
+    .sidebar {
+      grid-area: sidebar;
+      background: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .sidebar-header {
+      padding: 12px 16px;
+      background: rgba(0, 0, 0, 0.3);
+      border-bottom: 1px solid var(--border-color);
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: 0.5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .inventory-grid {
+      flex: 1;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: 90px;
+      gap: 10px;
+      overflow-y: auto;
+    }
+
+    .inventory-slot {
+      background: rgba(10, 12, 16, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+    }
+
+    .inventory-slot:hover {
+      border-color: var(--accent-blue);
+      background: rgba(69, 123, 157, 0.15);
+    }
+
+    .inventory-slot.selected {
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 10px rgba(244, 162, 97, 0.4);
+      background: rgba(244, 162, 97, 0.1);
+    }
+
+    .item-icon {
+      font-size: 1.8rem;
+      margin-bottom: 4px;
+    }
+
+    .item-name {
+      font-size: 0.72rem;
+      text-align: center;
+      color: var(--text-main);
+      line-height: 1.1;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .item-qty {
+      position: absolute;
+      bottom: 4px;
+      right: 6px;
+      background: rgba(0,0,0,0.8);
+      color: var(--accent-gold);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 1px 4px;
+      border-radius: 3px;
+    }
+
+    .sidebar-footer {
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.3);
+      border-top: 1px solid var(--border-color);
+    }
+
+    .item-inspect-panel {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      min-height: 50px;
+    }
+
+    .item-inspect-panel h4 {
+      color: #fff;
+      margin-bottom: 4px;
+      font-size: 0.9rem;
+    }
+
+    /* Narrative / Action Log Area */
+    .log-container {
+      grid-area: log;
+      background: var(--panel-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .log-header {
+      padding: 8px 16px;
+      background: rgba(0, 0, 0, 0.3);
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .log-content {
+      flex: 1;
+      padding: 12px 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.88rem;
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+
+    .log-entry {
+      line-height: 1.4;
+      border-left: 3px solid var(--border-color);
+      padding-left: 10px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .log-entry.info { border-color: var(--accent-blue); }
+    .log-entry.pickup { border-color: var(--accent-green); color: #b7e4c7; }
+    .log-entry.warning { border-color: var(--accent-gold); color: #ffe8d6; }
+    .log-entry.danger { border-color: var(--accent-color); color: #ffb4a2; }
+    .log-entry.success { border-color: #52b788; color: #d8f3dc; font-weight: 600; }
+
+    .log-entry .time {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-right: 8px;
+    }
+
+    /* Modal / Overlays */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(5px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: #141923;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      width: 90%;
+      max-width: 650px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    }
+
+    .modal-header {
+      padding: 16px 20px;
+      background: #0f131a;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-body {
+      padding: 20px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .map-nodes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .map-node-card {
+      background: #1a2230;
+      border: 1px solid var(--border-color);
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .map-node-card:hover {
+      border-color: var(--accent-blue);
+      transform: translateY(-2px);
+    }
+
+    .map-node-card.current {
+      border-color: var(--accent-gold);
+      background: rgba(244, 162, 97, 0.15);
+    }
+
+    .map-node-card.locked {
+      opacity: 0.5;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <header>
+    <div class="game-title">
+      <span>BLACKWOOD HIGH INCIDENT</span>
+      <span class="badge">Playtest Prototype</span>
+    </div>
+    <div class="header-controls">
+      <button class="btn" id="btnAudioToggle">🔊 Sound On</button>
+      <button class="btn" id="btnMap">🗺️ Map & Connections</button>
+      <button class="btn btn-danger" id="btnReset">🔄 Reset Game</button>
+    </div>
+  </header>
+
+  <!-- Main Game Layout -->
+  <div class="game-layout">
+    
+    <!-- Room Viewport Canvas -->
+    <div class="viewport-container">
+      <canvas id="gameCanvas" width="960" height="540"></canvas>
+      
+      <div class="room-overlay-header">
+        <div class="room-name" id="displayRoomName">Loading...</div>
+        <div class="room-objective" id="displayObjective">Objective...</div>
+      </div>
+
+      <div class="progression-badge">
+        Progression Step: <span id="displayProgressionStep">1 / 4</span>
+      </div>
+
+      <div id="tooltip">Tooltip text</div>
+    </div>
+
+    <!-- Inventory Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <span>INVENTORY</span>
+        <span style="font-size: 0.8rem; color: var(--text-muted);" id="inventoryCount">0 items</span>
+      </div>
+      <div class="inventory-grid" id="inventoryGrid">
+        <!-- Inventory slots populated dynamically -->
+      </div>
+      <div class="sidebar-footer">
+        <div class="item-inspect-panel" id="inspectPanel">
+          <h4>Inspect Item</h4>
+          <p>Click an item in your inventory to examine details.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Narrative / Action Log -->
+    <div class="log-container">
+      <div class="log-header">
+        <span>ACTION LOG & NARRATIVE</span>
+        <span id="logCounter">0 events</span>
+      </div>
+      <div class="log-content" id="logContent">
+        <!-- Log entries populated dynamically -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Map Modal -->
+  <div class="modal-overlay" id="mapModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Spatial Node Connections (Map)</h3>
+        <button class="btn" id="btnCloseMap">✕ Close</button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 16px; font-size: 0.85rem; color: var(--text-muted);">
+          Select a discovered room node below to fast-travel or review location status:
+        </p>
+        <div class="map-nodes-grid" id="mapGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Win Modal -->
+  <div class="modal-overlay" id="winModal">
+    <div class="modal-card" style="text-align: center;">
+      <div class="modal-header">
+        <h3 style="color: var(--accent-green);">🎉 SURVIVAL ESCAPE SUCCESSFUL!</h3>
+      </div>
+      <div class="modal-body">
+        <h2 style="font-size: 1.8rem; margin-bottom: 12px; color: #fff;">You Escaped Blackwood High!</h2>
+        <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 20px;">
+          You successfully navigated through the gray mussel alleyway, basement vents, infected vestibule, science lab, principal's office, and reached the loading dock escape boat!
+        </p>
+        <div style="background: rgba(0,0,0,0.4); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color); text-align: left; margin-bottom: 20px;">
+          <p>⏱️ <strong>Playtest Duration:</strong> <span id="winTime">0s</span></p>
+          <p>🎒 <strong>Items Collected:</strong> <span id="winItems">0</span></p>
+          <p>🗺️ <strong>Rooms Explored:</strong> <span id="winRooms">0 / 10</span></p>
+        </div>
+        <button class="btn btn-danger" id="btnRestartWin" style="padding: 10px 24px; font-size: 1rem; margin: 0 auto;">Play Again</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- GAME DATA DEFINITION (Ingested from sample_game1.json) ---
+    const GAME_DATA = {
+      "scenario_title": "Outbreak: Blackwood High Incident (Alley to Docks)",
+      "narrative_summary": "The survivors begin trapped in a claustrophobic alleyway behind Blackwood High School. After bypassing a crashed delivery truck and recovering a padlock key to enter via lower basement ventilation, they navigate through the infected main vestibule and classrooms. Gaining access to the science laboratory and principal's suite allows them to synthesize a chemical agent, solve security puzzles, and obtain the Master Keycard. Finally, they break out through the loading bay corridor into the docks yard, where they must reactivate the generator board and defend against a horde assault to reach the escape boat.",
+      "rooms": {
+        "RM_01_ALLEYWAY": {
+          "room_id": "RM_01_ALLEYWAY",
+          "room_name": "The Gray Mussel Alleyway (Prologue)",
+          "progression_step": 1,
+          "objective_beat": "Escape the alleyway collapse, retrieve the rusted padlock key near the truck wreck, and unlock the basement vent grate.",
+          "bg_color": "#181a1f",
+          "theme_color": "#4a5568",
+          "hotspots": [
+            { "id": "KEY_PADLOCK_ITEM", "type": "item", "name": "Rusted Padlock Key", "x": 620, "y": 380, "w": 40, "h": 40, "item_id": "key_alley_padlock", "quantity": 1, "icon": "🔑" },
+            { "id": "CONTAINER_TRUCK_CAB", "type": "container", "name": "Crashed Truck Cab", "x": 160, "y": 240, "w": 140, "h": 120, "items": [{ "item_id": "ammo_handgun", "name": "Handgun Ammo", "quantity": 10, "icon": "🔫" }] },
+            { "id": "CONTAINER_CRATE_01", "type": "container", "name": "Wooden Crate", "x": 380, "y": 340, "w": 80, "h": 80, "items": [{ "item_id": "cloth_scrap", "name": "Cloth Scrap", "quantity": 2, "icon": "🧵" }] },
+            { "id": "CONTAINER_TRASH_BIN_01", "type": "container", "name": "Metal Dumpster", "x": 800, "y": 310, "w": 110, "h": 130, "items": [] },
+            { "id": "CONN_HW_01_BASEMENT_VENT", "type": "door", "name": "Padlocked Basement Vent Grate", "x": 440, "y": 140, "w": 100, "h": 110, "target_room": "HW_01_BASEMENT_VENT", "required_key": "key_alley_padlock", "icon": "🚪" }
+          ]
+        },
+        "HW_01_BASEMENT_VENT": {
+          "room_id": "HW_01_BASEMENT_VENT",
+          "room_name": "Basement Ventilation Ingress Shunt",
+          "progression_step": 1,
+          "objective_beat": "Crawl through the dark ventilation ductwork to access the school's lower basement level.",
+          "bg_color": "#121417",
+          "theme_color": "#2d3748",
+          "hotspots": [
+            { "id": "CONTAINER_VENT_CORNER_DUST", "type": "container", "name": "Duct Dust Corner", "x": 220, "y": 320, "w": 70, "h": 70, "items": [{ "item_id": "flashlight_battery", "name": "Flashlight Battery", "quantity": 1, "icon": "🔋" }] },
+            { "id": "CONTAINER_MAINTENANCE_LOCKER", "type": "container", "name": "Maintenance Locker", "x": 680, "y": 220, "w": 90, "h": 160, "items": [] },
+            { "id": "CONN_RM_01_ALLEYWAY", "type": "door", "name": "Vent Entrance (Back to Alley)", "x": 60, "y": 200, "w": 90, "h": 140, "target_room": "RM_01_ALLEYWAY", "icon": "⬅️" },
+            { "id": "CONN_RM_02_MAIN_VESTIBULE", "type": "door", "name": "Drop Ladder to Main Vestibule", "x": 430, "y": 120, "w": 120, "h": 180, "target_room": "RM_02_MAIN_VESTIBULE", "icon": "🪜" }
+          ]
+        },
+        "RM_02_MAIN_VESTIBULE": {
+          "room_id": "RM_02_MAIN_VESTIBULE",
+          "room_name": "Main Vestibule Hub",
+          "progression_step": 2,
+          "objective_beat": "Collect the school layout map from the kiosk desk and find an electrical fuse in the Admissions wing for the security gate.",
+          "bg_color": "#191c24",
+          "theme_color": "#457b9d",
+          "hotspots": [
+            { "id": "KIOSK_MAP_DESK", "type": "item", "name": "School Layout Map (Kiosk)", "x": 420, "y": 280, "w": 130, "h": 80, "item_id": "item_layout_map", "quantity": 1, "icon": "🗺️" },
+            { "id": "CONTAINER_VESTIBULE_DESK", "type": "container", "name": "Reception Desk Drawer", "x": 160, "y": 320, "w": 110, "h": 90, "items": [{ "item_id": "weapon_handgun", "name": "9mm Handgun", "quantity": 1, "icon": "🔫" }] },
+            { "id": "CONTAINER_SECURITY_LOCKER_01", "type": "container", "name": "Security Locker", "x": 750, "y": 200, "w": 80, "h": 180, "items": [{ "item_id": "ammo_handgun", "name": "Handgun Ammo", "quantity": 15, "icon": "🔫" }] },
+            { "id": "CONN_HW_01_BASEMENT_VENT", "type": "door", "name": "Basement Floor Grate", "x": 80, "y": 420, "w": 100, "h": 80, "target_room": "HW_01_BASEMENT_VENT", "icon": "⬇️" },
+            { "id": "CONN_RM_02_ADMISSIONS", "type": "door", "name": "Shattered Window (To Admissions)", "x": 800, "y": 220, "w": 100, "h": 150, "target_room": "RM_02_ADMISSIONS", "icon": "🪟" },
+            { "id": "CONN_HW_02_CENTRAL_CONCOURSE", "type": "door", "name": "Electronic Security Gate", "x": 410, "y": 100, "w": 140, "h": 130, "target_room": "HW_02_CENTRAL_CONCOURSE", "required_key": "ITEM_FUSE", "icon": "⚡" }
+          ]
+        },
+        "RM_02_ADMISSIONS": {
+          "room_id": "RM_02_ADMISSIONS",
+          "room_name": "Admissions Reception Wing",
+          "progression_step": 2,
+          "objective_beat": "Retrieve the electrical fuse, recover the classroom key, and bypass the central concourse security.",
+          "bg_color": "#211a1d",
+          "theme_color": "#e63946",
+          "hotspots": [
+            { "id": "ITEM_FUSE", "type": "item", "name": "Electrical Fuse", "x": 580, "y": 260, "w": 40, "h": 40, "item_id": "ITEM_FUSE", "quantity": 1, "icon": "⚡" },
+            { "id": "CONTAINER_ADMISSIONS_FILING_CABINET", "type": "container", "name": "Filing Cabinet", "x": 680, "y": 200, "w": 100, "h": 160, "items": [{ "item_id": "key_classroom_master", "name": "Classroom Master Key", "quantity": 1, "icon": "🔑" }] },
+            { "id": "CONTAINER_RECEPTION_DESK_01", "type": "container", "name": "Admissions Counter Drawer", "x": 240, "y": 320, "w": 90, "h": 70, "items": [{ "item_id": "herb_green", "name": "Green Herb", "quantity": 1, "icon": "🌿" }] },
+            { "id": "CONN_RM_02_MAIN_VESTIBULE", "type": "door", "name": "One-Way Pass Door (To Vestibule)", "x": 80, "y": 200, "w": 100, "h": 160, "target_room": "RM_02_MAIN_VESTIBULE", "icon": "🚪" },
+            { "id": "CONN_HW_02_CENTRAL_CONCOURSE", "type": "door", "name": "Classroom Wing Door", "x": 420, "y": 110, "w": 120, "h": 140, "target_room": "HW_02_CENTRAL_CONCOURSE", "required_key": "key_classroom_master", "icon": "🚪" }
+          ]
+        },
+        "HW_02_CENTRAL_CONCOURSE": {
+          "room_id": "HW_02_CENTRAL_CONCOURSE",
+          "room_name": "Central Concourse Hallway",
+          "progression_step": 2,
+          "objective_beat": "Traverse the biogrowth-choked concourse to reach Science Lab A and the Principal's Office wing.",
+          "bg_color": "#17202a",
+          "theme_color": "#2a9d8f",
+          "hotspots": [
+            { "id": "CONTAINER_TROPHY_CASE", "type": "container", "name": "Glass Trophy Case", "x": 720, "y": 220, "w": 90, "h": 150, "items": [{ "item_id": "ammo_shotgun_shells", "name": "Shotgun Shells", "quantity": 4, "icon": "💥" }] },
+            { "id": "CONTAINER_STUDENT_LOCKER_01", "type": "container", "name": "Student Locker #104", "x": 180, "y": 200, "w": 60, "h": 160, "items": [{ "item_id": "bandages", "name": "Medical Bandages", "quantity": 2, "icon": "🩹" }] },
+            { "id": "CONTAINER_MAINTENANCE_CART", "type": "container", "name": "Janitor Utility Cart", "x": 580, "y": 340, "w": 100, "h": 80, "items": [{ "item_id": "tool_lockpick", "name": "Lockpick Tool", "quantity": 1, "icon": "🗝️" }] },
+            { "id": "CONN_RM_02_MAIN_VESTIBULE", "type": "door", "name": "Electronic Gate (Back to Vestibule)", "x": 430, "y": 420, "w": 100, "h": 80, "target_room": "RM_02_MAIN_VESTIBULE", "icon": "⬇️" },
+            { "id": "CONN_RM_03_LAB_A", "type": "door", "name": "Science Lab A Door", "x": 100, "y": 180, "w": 100, "h": 150, "target_room": "RM_03_LAB_A", "icon": "🧪" },
+            { "id": "CONN_RM_04_PRINCIPAL", "type": "door", "name": "Biogrowth Blocked Door (Principal Wing)", "x": 800, "y": 180, "w": 100, "h": 150, "target_room": "RM_04_PRINCIPAL", "required_key": "ITEM_CHEMICAL_AGENT", "icon": "☣️" },
+            { "id": "CONN_HW_03_LOADING_CORRIDOR", "type": "door", "name": "Master Security Gate (To Loading Bay)", "x": 420, "y": 100, "w": 120, "h": 120, "target_room": "HW_03_LOADING_CORRIDOR", "required_key": "ITEM_MASTER_KEYCARD", "icon": "💳" }
+          ]
+        },
+        "RM_03_LAB_A": {
+          "room_id": "RM_03_LAB_A",
+          "room_name": "Science Laboratory A",
+          "progression_step": 3,
+          "objective_beat": "Purge toxic hazards, open safe chemical cabinet to synthesize Chemical Agent for dissolving bio-doors.",
+          "bg_color": "#112211",
+          "theme_color": "#2a9d8f",
+          "hotspots": [
+            { "id": "SAFE_CHEMICAL_CABINET", "type": "item", "name": "Synthesized Chemical Agent Vials", "x": 200, "y": 220, "w": 100, "h": 120, "item_id": "ITEM_CHEMICAL_AGENT", "quantity": 1, "icon": "🧪" },
+            { "id": "CONTAINER_HAZMAT_CABINET", "type": "container", "name": "Hazmat Locker", "x": 750, "y": 180, "w": 100, "h": 180, "items": [{ "item_id": "weapon_shotgun", "name": "12-Gauge Shotgun", "quantity": 1, "icon": "🔫" }] },
+            { "id": "CONTAINER_LAB_DRAWER_01", "type": "container", "name": "Lab Desk Drawer", "x": 420, "y": 320, "w": 120, "h": 80, "items": [{ "item_id": "herb_combined_green_blue", "name": "Mixed Herbal Remedy", "quantity": 1, "icon": "💊" }] },
+            { "id": "CONN_HW_02_CENTRAL_CONCOURSE", "type": "door", "name": "Exit to Central Concourse", "x": 70, "y": 200, "w": 100, "h": 160, "target_room": "HW_02_CENTRAL_CONCOURSE", "icon": "🚪" },
+            { "id": "CONN_RM_03_JANITOR_NORTH", "type": "door", "name": "Emergency Fire Door", "x": 430, "y": 110, "w": 100, "h": 130, "target_room": "RM_03_JANITOR_NORTH", "icon": "🚪" }
+          ]
+        },
+        "RM_03_JANITOR_NORTH": {
+          "room_id": "RM_03_JANITOR_NORTH",
+          "room_name": "Janitorial Closet North",
+          "progression_step": 3,
+          "objective_beat": "Unlock emergency shortcut and replenish medical supplies.",
+          "bg_color": "#1a1815",
+          "theme_color": "#f4a261",
+          "hotspots": [
+            { "id": "ITEM_GREEN_HERB", "type": "item", "name": "Fresh Green Herb", "x": 620, "y": 340, "w": 50, "h": 50, "item_id": "herb_green", "quantity": 1, "icon": "🌿" },
+            { "id": "CONTAINER_SUPPLY_CABINET", "type": "container", "name": "Supply Cabinet", "x": 220, "y": 200, "w": 100, "h": 160, "items": [{ "item_id": "herb_green", "name": "Green Herb", "quantity": 2, "icon": "🌿" }] },
+            { "id": "CONN_RM_03_LAB_A", "type": "door", "name": "Door to Science Lab A", "x": 430, "y": 120, "w": 100, "h": 150, "target_room": "RM_03_LAB_A", "icon": "🚪" }
+          ]
+        },
+        "RM_04_PRINCIPAL": {
+          "room_id": "RM_04_PRINCIPAL",
+          "room_name": "Principal's Office Suite",
+          "progression_step": 3,
+          "objective_beat": "Solve the security safe puzzle to retrieve the Master Keycard.",
+          "bg_color": "#281519",
+          "theme_color": "#e63946",
+          "hotspots": [
+            { "id": "ITEM_MASTER_KEYCARD", "type": "item", "name": "Master Keycard", "x": 220, "y": 250, "w": 50, "h": 50, "item_id": "ITEM_MASTER_KEYCARD", "quantity": 1, "icon": "💳" },
+            { "id": "SAFE_MASTER_SECURITY", "type": "container", "name": "Principal Executive Safe", "x": 200, "y": 220, "w": 90, "h": 120, "items": [{ "item_id": "ammo_magnum", "name": ".44 Magnum Ammo", "quantity": 3, "icon": "💥" }, { "item_id": "key_faculty_wing", "name": "Faculty Key", "quantity": 1, "icon": "🔑" }] },
+            { "id": "CONTAINER_EXECUTIVE_DESK", "type": "container", "name": "Executive Mahogany Desk", "x": 430, "y": 300, "w": 140, "h": 100, "items": [{ "item_id": "healing_first_aid_spray", "name": "First Aid Spray", "quantity": 1, "icon": "🩹" }] },
+            { "id": "CONN_HW_02_CENTRAL_CONCOURSE", "type": "door", "name": "Door to Central Concourse", "x": 780, "y": 200, "w": 100, "h": 160, "target_room": "HW_02_CENTRAL_CONCOURSE", "icon": "🚪" }
+          ]
+        },
+        "HW_03_LOADING_CORRIDOR": {
+          "room_id": "HW_03_LOADING_CORRIDOR",
+          "room_name": "Loading Bay Transit Corridor",
+          "progression_step": 4,
+          "objective_beat": "Swipe the Master Keycard to enter the industrial transit hallway toward the harbor docks.",
+          "bg_color": "#14171c",
+          "theme_color": "#457b9d",
+          "hotspots": [
+            { "id": "CONTAINER_SECURITY_STATION_DESK", "type": "container", "name": "Security Guard Desk", "x": 180, "y": 320, "w": 110, "h": 90, "items": [{ "item_id": "ammo_shotgun_shells", "name": "Shotgun Shells", "quantity": 6, "icon": "💥" }] },
+            { "id": "CONTAINER_TRANSIT_LOCKER", "type": "container", "name": "Transit Locker", "x": 740, "y": 200, "w": 90, "h": 160, "items": [{ "item_id": "ammo_handgun", "name": "Handgun Ammo", "quantity": 15, "icon": "🔫" }] },
+            { "id": "CONTAINER_TOOLBOX_HIGHWAY", "type": "container", "name": "Steel Toolbox", "x": 360, "y": 360, "w": 70, "h": 50, "items": [{ "item_id": "tool_wrench", "name": "Heavy Wrench", "quantity": 1, "icon": "🔧" }] },
+            { "id": "CONN_HW_02_CENTRAL_CONCOURSE", "type": "door", "name": "Security Gate (Back to Concourse)", "x": 70, "y": 200, "w": 90, "h": 150, "target_room": "HW_02_CENTRAL_CONCOURSE", "icon": "⬅️" },
+            { "id": "CONN_RM_05_LOADING_DOCK", "type": "door", "name": "Exit Threshold to Loading Dock Yard", "x": 420, "y": 100, "w": 130, "h": 150, "target_room": "RM_05_LOADING_DOCK", "icon": "🚪" }
+          ]
+        },
+        "RM_05_LOADING_DOCK": {
+          "room_id": "RM_05_LOADING_DOCK",
+          "room_name": "Loading Dock Yard (Final Apex)",
+          "progression_step": 4,
+          "objective_beat": "Reactivate the dock generator console, open the motorized shutter, and board the harbor boat to escape!",
+          "bg_color": "#0d1b2a",
+          "theme_color": "#e63946",
+          "hotspots": [
+            { "id": "CONSOLE_GENERATOR_BOARD", "type": "console", "name": "Main Dock Generator Switchboard", "x": 160, "y": 260, "w": 120, "h": 120, "icon": "⚡" },
+            { "id": "CONTAINER_DOCKMASTER_SAFE", "type": "container", "name": "Dockmaster Safe", "x": 750, "y": 260, "w": 100, "h": 100, "items": [{ "item_id": "weapon_magnum", "name": "Custom Magnum", "quantity": 1, "icon": "🔫" }, { "item_id": "ammo_magnum", "name": "Magnum Ammo", "quantity": 4, "icon": "💥" }] },
+            { "id": "CONTAINER_EMERGENCY_CACHE", "type": "container", "name": "Emergency Medical Cache", "x": 620, "y": 340, "w": 90, "h": 70, "items": [{ "item_id": "item_anti_virus_serum", "name": "Anti-Virus Serum", "quantity": 1, "icon": "🧪" }, { "item_id": "healing_first_aid_spray", "name": "First Aid Spray", "quantity": 1, "icon": "🩹" }] },
+            { "id": "CONN_HW_03_LOADING_CORRIDOR", "type": "door", "name": "Door to Loading Corridor", "x": 80, "y": 380, "w": 90, "h": 90, "target_room": "HW_03_LOADING_CORRIDOR", "icon": "⬅️" },
+            { "id": "ESCAPE_BOAT", "type": "win_trigger", "name": "Harbor Escape Boat", "x": 400, "y": 140, "w": 160, "h": 140, "required_generator": true, "icon": "🛥️" }
+          ]
+        }
+      }
+    };
+
+    // --- GAME ENGINE STATE ---
+    const state = {
+      currentRoomId: "RM_01_ALLEYWAY",
+      inventory: [],
+      visitedRooms: new Set(["RM_01_ALLEYWAY"]),
+      lootedHotspots: new Set(),
+      generatorActive: false,
+      selectedItemIndex: null,
+      startTime: Date.now(),
+      logCount: 0,
+      soundEnabled: true
+    };
+
+    // --- AUDIO SYNTHESIS (Web Audio API) ---
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function playSound(type) {
+      if (!state.soundEnabled) return;
+      try {
+        if (!audioCtx) audioCtx = new AudioCtx();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        const now = audioCtx.currentTime;
+
+        if (type === 'click') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(440, now);
+          osc.frequency.exponentialRampToValueAtTime(880, now + 0.05);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.linearRampToValueAtTime(0.01, now + 0.05);
+          osc.start(now);
+          osc.stop(now + 0.05);
+        } else if (type === 'pickup') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(523.25, now);
+          osc.frequency.exponentialRampToValueAtTime(1046.50, now + 0.15);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.linearRampToValueAtTime(0.01, now + 0.15);
+          osc.start(now);
+          osc.stop(now + 0.15);
+        } else if (type === 'door') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(180, now);
+          osc.frequency.exponentialRampToValueAtTime(60, now + 0.25);
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.linearRampToValueAtTime(0.01, now + 0.25);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        } else if (type === 'locked') {
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(150, now);
+          osc.frequency.setValueAtTime(100, now + 0.08);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.linearRampToValueAtTime(0.01, now + 0.2);
+          osc.start(now);
+          osc.stop(now + 0.2);
+        } else if (type === 'win') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(523.25, now);
+          osc.frequency.setValueAtTime(659.25, now + 0.1);
+          osc.frequency.setValueAtTime(783.99, now + 0.2);
+          osc.frequency.setValueAtTime(1046.50, now + 0.3);
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.linearRampToValueAtTime(0.01, now + 0.6);
+          osc.start(now);
+          osc.stop(now + 0.6);
+        }
+      } catch (e) {
+        console.warn("Audio Context Error", e);
+      }
+    }
+
+    // --- LOGGING ENGINE ---
+    function addLog(message, type = 'info') {
+      state.logCount++;
+      const logContent = document.getElementById('logContent');
+      const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      
+      const entry = document.createElement('div');
+      entry.className = `log-entry ${type}`;
+      entry.innerHTML = `<span class="time">[${timeStr}]</span>${message}`;
+      
+      logContent.appendChild(entry);
+      logContent.scrollTop = logContent.scrollHeight;
+      document.getElementById('logCounter').textContent = `${state.logCount} events`;
+    }
+
+    // --- CANVAS ROOM RENDERER ---
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    let hoveredHotspot = null;
+
+    function renderRoom() {
+      const room = GAME_DATA.rooms[state.currentRoomId];
+      if (!room) return;
+
+      // Clear & Draw Background
+      ctx.fillStyle = room.bg_color || '#000';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Perspective Grid Lines for Ambient Horror Feel
+      ctx.strokeStyle = room.theme_color || '#333';
+      ctx.lineWidth = 1;
+      ctx.globalAlpha = 0.15;
+      for (let x = 0; x < canvas.width; x += 60) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(canvas.width / 2 + (x - canvas.width / 2) * 2, canvas.height);
+        ctx.stroke();
+      }
+      for (let y = 0; y < canvas.height; y += 40) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1.0;
+
+      // Draw Room Architecture Silhouette / Title Watermark
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
+      ctx.font = 'bold 80px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(room.room_id, canvas.width / 2, canvas.height / 2 + 30);
+
+      // Draw Hotspots
+      room.hotspots.forEach(hs => {
+        const isLooted = state.lootedHotspots.has(hs.id);
+        const isHovered = (hoveredHotspot === hs);
+
+        ctx.save();
+        ctx.translate(hs.x, hs.y);
+
+        // Hotspot Bounding Box
+        ctx.fillStyle = isHovered 
+          ? 'rgba(69, 123, 157, 0.35)' 
+          : (isLooted ? 'rgba(42, 52, 69, 0.2)' : 'rgba(244, 162, 97, 0.15)');
+        
+        ctx.strokeStyle = isHovered 
+          ? '#457b9d' 
+          : (isLooted ? '#4a5568' : (hs.type === 'door' ? '#e63946' : '#f4a261'));
+        
+        ctx.lineWidth = isHovered ? 3 : 2;
+        if (isLooted) ctx.setLineDash([4, 4]);
+
+        ctx.beginPath();
+        ctx.roundRect(0, 0, hs.w, hs.h, 8);
+        ctx.fill();
+        ctx.stroke();
+
+        // Hotspot Icon & Label
+        ctx.fillStyle = isLooted ? '#718096' : '#ffffff';
+        ctx.font = '22px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(hs.icon || '🔍', hs.w / 2, hs.h / 2 + 6);
+
+        ctx.font = '11px sans-serif';
+        ctx.fillStyle = isHovered ? '#ffffff' : (isLooted ? '#718096' : '#e2e8f0');
+        ctx.fillText(isLooted ? `${hs.name} (Searched)` : hs.name, hs.w / 2, hs.h + 16);
+
+        ctx.restore();
+      });
+
+      // Update UI Text Overlays
+      document.getElementById('displayRoomName').textContent = room.room_name;
+      document.getElementById('displayObjective').textContent = room.objective_beat;
+      document.getElementById('displayProgressionStep').textContent = `${room.progression_step} / 4`;
+    }
+
+    // --- CANVAS INTERACTION LISTENERS ---
+    canvas.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const mx = (e.clientX - rect.left) * scaleX;
+      const my = (e.clientY - rect.top) * scaleY;
+
+      const room = GAME_DATA.rooms[state.currentRoomId];
+      let found = null;
+
+      if (room) {
+        for (let hs of room.hotspots) {
+          if (mx >= hs.x && mx <= hs.x + hs.w && my >= hs.y && my <= hs.y + hs.h) {
+            found = hs;
+            break;
+          }
+        }
+      }
+
+      if (hoveredHotspot !== found) {
+        hoveredHotspot = found;
+        canvas.style.cursor = found ? 'pointer' : 'default';
+        
+        const tooltip = document.getElementById('tooltip');
+        if (found) {
+          tooltip.style.display = 'block';
+          tooltip.style.left = `${e.clientX - rect.left}px`;
+          tooltip.style.top = `${e.clientY - rect.top}px`;
+          tooltip.textContent = state.lootedHotspots.has(found.id) ? `${found.name} (Searched)` : found.name;
+        } else {
+          tooltip.style.display = 'none';
+        }
+        renderRoom();
+      } else if (found) {
+        const tooltip = document.getElementById('tooltip');
+        tooltip.style.left = `${e.clientX - rect.left}px`;
+        tooltip.style.top = `${e.clientY - rect.top}px`;
+      }
+    });
+
+    canvas.addEventListener('mouseleave', () => {
+      hoveredHotspot = null;
+      document.getElementById('tooltip').style.display = 'none';
+      renderRoom();
+    });
+
+    canvas.addEventListener('click', () => {
+      if (!hoveredHotspot) return;
+      handleHotspotClick(hoveredHotspot);
+    });
+
+    // --- GAMEPLAY ACTION LOGIC ---
+    function handleHotspotClick(hs) {
+      const room = GAME_DATA.rooms[state.currentRoomId];
+
+      // 1. Container Interaction
+      if (hs.type === 'container') {
+        if (state.lootedHotspots.has(hs.id)) {
+          playSound('click');
+          addLog(`Inspected ${hs.name}. It is empty.`, 'info');
+          return;
+        }
+
+        state.lootedHotspots.add(hs.id);
+        if (hs.items && hs.items.length > 0) {
+          playSound('pickup');
+          hs.items.forEach(item => {
+            addItemToInventory(item);
+            addLog(`Found ${item.quantity}x ${item.name} in ${hs.name}!`, 'pickup');
+          });
+        } else {
+          playSound('click');
+          addLog(`Searched ${hs.name}. Nothing found inside.`, 'info');
+        }
+        renderRoom();
+        return;
+      }
+
+      // 2. Direct Item Pickups
+      if (hs.type === 'item') {
+        if (state.lootedHotspots.has(hs.id)) {
+          playSound('click');
+          addLog(`Already picked up item from ${hs.name}.`, 'info');
+          return;
+        }
+
+        state.lootedHotspots.add(hs.id);
+        playSound('pickup');
+        addItemToInventory({
+          item_id: hs.item_id,
+          name: hs.name,
+          quantity: hs.quantity || 1,
+          icon: hs.icon || '📦'
+        });
+        addLog(`Acquired key item: ${hs.name}!`, 'success');
+        renderRoom();
+        return;
+      }
+
+      // 3. Door Navigation & Locking Verification
+      if (hs.type === 'door') {
+        if (hs.required_key) {
+          const hasKey = state.inventory.some(i => i.item_id === hs.required_key);
+          if (!hasKey) {
+            playSound('locked');
+            addLog(`Cannot open ${hs.name}. Requires key item: [${hs.required_key}]!`, 'warning');
+            return;
+          }
+          addLog(`Unlocked ${hs.name} using [${hs.required_key}]!`, 'success');
+        }
+
+        playSound('door');
+        changeRoom(hs.target_room);
+        return;
+      }
+
+      // 4. Generator Switchboard Console
+      if (hs.type === 'console') {
+        playSound('pickup');
+        state.generatorActive = true;
+        addLog(`Reactivated ${hs.name}! Power restored to harbor motorized shutter!`, 'success');
+        renderRoom();
+        return;
+      }
+
+      // 5. Win Condition Trigger
+      if (hs.type === 'win_trigger') {
+        if (!state.generatorActive) {
+          playSound('locked');
+          addLog(`Escape shutter is powered off! Reactivate the main dock generator console first!`, 'danger');
+          return;
+        }
+        playSound('win');
+        triggerWinScreen();
+        return;
+      }
+    }
+
+    // --- INVENTORY MANAGEMENT ---
+    function addItemToInventory(item) {
+      const existing = state.inventory.find(i => i.item_id === item.item_id);
+      if (existing) {
+        existing.quantity += item.quantity;
+      } else {
+        state.inventory.push({ ...item });
+      }
+      updateInventoryUI();
+    }
+
+    function updateInventoryUI() {
+      const grid = document.getElementById('inventoryGrid');
+      grid.innerHTML = '';
+
+      state.inventory.forEach((item, index) => {
+        const slot = document.createElement('div');
+        slot.className = `inventory-slot ${state.selectedItemIndex === index ? 'selected' : ''}`;
+        slot.innerHTML = `
+          <div class="item-icon">${item.icon || '📦'}</div>
+          <div class="item-name">${item.name}</div>
+          <div class="item-qty">x${item.quantity}</div>
+        `;
+        slot.addEventListener('click', () => {
+          playSound('click');
+          state.selectedItemIndex = index;
+          updateInventoryUI();
+          showItemInspect(item);
+        });
+        grid.appendChild(slot);
+      });
+
+      document.getElementById('inventoryCount').textContent = `${state.inventory.length} items`;
+    }
+
+    function showItemInspect(item) {
+      const panel = document.getElementById('inspectPanel');
+      panel.innerHTML = `
+        <h4>${item.icon || ''} ${item.name}</h4>
+        <p>Quantity: <strong>${item.quantity}</strong> | ID: <code>${item.item_id}</code></p>
+      `;
+    }
+
+    // --- ROOM NAVIGATION ---
+    function changeRoom(roomId) {
+      state.currentRoomId = roomId;
+      state.visitedRooms.add(roomId);
+      const room = GAME_DATA.rooms[roomId];
+      addLog(`Entered location: ${room.room_name}`, 'info');
+      renderRoom();
+    }
+
+    // --- WIN SCREEN & STATS ---
+    function triggerWinScreen() {
+      const timeSec = Math.floor((Date.now() - state.startTime) / 1000);
+      document.getElementById('winTime').textContent = `${timeSec} seconds`;
+      document.getElementById('winItems').textContent = `${state.inventory.length} items held`;
+      document.getElementById('winRooms').textContent = `${state.visitedRooms.size} / ${Object.keys(GAME_DATA.rooms).length}`;
+      document.getElementById('winModal').classList.add('active');
+    }
+
+    // --- MAP MODAL & FAST TRAVEL ---
+    document.getElementById('btnMap').addEventListener('click', () => {
+      playSound('click');
+      renderMapNodes();
+      document.getElementById('mapModal').classList.add('active');
+    });
+
+    document.getElementById('btnCloseMap').addEventListener('click', () => {
+      playSound('click');
+      document.getElementById('mapModal').classList.remove('active');
+    });
+
+    function renderMapNodes() {
+      const grid = document.getElementById('mapGrid');
+      grid.innerHTML = '';
+
+      Object.values(GAME_DATA.rooms).forEach(room => {
+        const card = document.createElement('div');
+        const isCurrent = room.room_id === state.currentRoomId;
+        const isDiscovered = state.visitedRooms.has(room.room_id);
+
+        card.className = `map-node-card ${isCurrent ? 'current' : ''} ${!isDiscovered ? 'locked' : ''}`;
+        card.innerHTML = `
+          <div style="font-weight:700; font-size:0.9rem; margin-bottom:4px;">${room.room_name}</div>
+          <div style="font-size:0.75rem; color:var(--text-muted);">ID: ${room.room_id}</div>
+          <div style="font-size:0.75rem; color:var(--accent-gold); margin-top:4px;">Step ${room.progression_step}</div>
+        `;
+
+        if (isDiscovered && !isCurrent) {
+          card.addEventListener('click', () => {
+            playSound('door');
+            changeRoom(room.room_id);
+            document.getElementById('mapModal').classList.remove('active');
+          });
+        }
+        grid.appendChild(card);
+      });
+    }
+
+    // --- RESET GAME ---
+    function resetGame() {
+      state.currentRoomId = "RM_01_ALLEYWAY";
+      state.inventory = [];
+      state.visitedRooms = new Set(["RM_01_ALLEYWAY"]);
+      state.lootedHotspots.clear();
+      state.generatorActive = false;
+      state.selectedItemIndex = null;
+      state.startTime = Date.now();
+      state.logCount = 0;
+      document.getElementById('logContent').innerHTML = '';
+      document.getElementById('winModal').classList.remove('active');
+      addLog("Game reset to Prologue Alleyway.", "warning");
+      updateInventoryUI();
+      renderRoom();
+    }
+
+    document.getElementById('btnReset').addEventListener('click', () => {
+      playSound('click');
+      if (confirm("Reset current playtest session?")) resetGame();
+    });
+    document.getElementById('btnRestartWin').addEventListener('click', resetGame);
+
+    // --- AUDIO TOGGLE ---
+    document.getElementById('btnAudioToggle').addEventListener('click', (e) => {
+      state.soundEnabled = !state.soundEnabled;
+      e.target.textContent = state.soundEnabled ? '🔊 Sound On' : '🔇 Sound Off';
+    });
+
+    // --- INITIALIZATION ---
+    window.addEventListener('load', () => {
+      renderRoom();
+      addLog("Started Playtest Session: Blackwood High Incident.", "info");
+      addLog("Objective: Escape the alleyway collapse and find padlock key.", "warning");
+    });
+  </script>
+</body>
+</html>
