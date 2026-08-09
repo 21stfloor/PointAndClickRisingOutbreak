@@ -627,6 +627,28 @@
     </div>
   </div>
 
+  <!-- Game Over Modal -->
+  <div class="modal-overlay" id="gameOverModal">
+    <div class="modal-card" style="text-align: center; border-color: var(--accent-red);">
+      <div class="modal-header" style="background: rgba(255, 77, 77, 0.15);">
+        <h3 style="color: var(--accent-red);">💀 YOU HAVE DIED!</h3>
+      </div>
+      <div class="modal-body">
+        <h2 style="font-size: 1.8rem; margin-bottom: 12px; color: #fff;">Fatal Threat Strike</h2>
+        <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 20px;">
+          Your HP reached 0 while exploring Blackwood High. The infected overrun your position.
+        </p>
+        <div style="background: rgba(0,0,0,0.4); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color); text-align: left; margin-bottom: 20px;">
+          <p>⏱️ <strong>Time Survived:</strong> <span id="loseTime">0s</span></p>
+          <p>🎒 <strong>Items Looted:</strong> <span id="loseItems">0</span></p>
+          <p>👾 <strong>Enemies Neutralized:</strong> <span id="loseEnemies">0</span></p>
+          <p>🗺️ <strong>Rooms Explored:</strong> <span id="loseRooms">0 / 10</span></p>
+        </div>
+        <button class="btn btn-danger" id="btnRestartLose" style="padding: 10px 24px; font-size: 1rem; margin: 0 auto;">🔄 Restart Game</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     // --- ASSETS & SCENARIO DATA ---
     const BASE_IMAGE_DIR = "story/Amrathshear/scenarios/scenario1/";
@@ -1069,7 +1091,9 @@
 
       // Check Game Over
       if (state.playerHp <= 0) {
-        addLog(`💀 YOU DIED! Your hp reached 0. Restart the game to try again.`, 'danger');
+        addLog(`💀 YOU DIED! Your hp reached 0. Game Over!`, 'danger');
+        triggerGameOverScreen();
+        return;
       }
 
       // Reset zombie attack frame after 700ms
@@ -1113,6 +1137,7 @@
     }
 
     function attackEnemy(enemy) {
+      if (state.playerHp <= 0) return;
       const weapon = state.inventory.find(i => i.item_id.startsWith('weapon_'));
       if (!weapon) {
         playSound('locked');
@@ -1154,6 +1179,7 @@
 
     // --- CANVAS INTERACTION LISTENERS ---
     canvas.addEventListener('mousemove', (e) => {
+      if (state.playerHp <= 0) return;
       const rect = canvas.getBoundingClientRect();
       const scaleX = canvas.width / rect.width;
       const scaleY = canvas.height / rect.height;
@@ -1203,6 +1229,7 @@
     });
 
     canvas.addEventListener('click', () => {
+      if (state.playerHp <= 0) return;
       if (!hoveredHotspot) return;
       handleHotspotClick(hoveredHotspot);
     });
@@ -1216,6 +1243,7 @@
 
     // --- HOTSPOT CLICK HANDLER ---
     function handleHotspotClick(hs) {
+      if (state.playerHp <= 0) return;
       // NPC Safe Room Interaction
       if (hs.type === 'npc') {
         playSound('click');
@@ -1299,6 +1327,7 @@
 
     // --- ITEM PICKUP & 5-SLOT SWAPPING ENGINE ---
     function attemptPickupItem(item, sourceHotspotId, sourceName) {
+      if (state.playerHp <= 0) return;
       // Check if stackable existing item
       const existing = state.inventory.find(i => i.item_id === item.item_id);
       if (existing) {
@@ -1331,7 +1360,7 @@
     }
 
     function swapItemInSlot(slotIndex) {
-      if (!state.isSwapping || !state.pendingItem) return;
+      if (state.playerHp <= 0 || !state.isSwapping || !state.pendingItem) return;
       const oldItem = state.inventory[slotIndex];
       const newItem = state.pendingItem;
 
@@ -1405,6 +1434,7 @@
         }
 
         slot.addEventListener('click', () => {
+          if (state.playerHp <= 0) return;
           if (state.isSwapping) {
             if (item) {
               swapItemInSlot(i);
@@ -1447,6 +1477,7 @@
         btnUse.style.cssText = 'margin-top:6px; font-size:0.75rem; padding:2px 8px; background:var(--accent-green); color:#fff;';
         btnUse.textContent = '💊 Consume / Heal';
         btnUse.addEventListener('click', () => {
+          if (state.playerHp <= 0) return;
           state.playerHp = Math.min(state.maxPlayerHp, state.playerHp + 40);
           item.quantity--;
           if (item.quantity <= 0) {
@@ -1463,6 +1494,7 @@
 
     // --- ROOM NAVIGATION ---
     function changeRoom(roomId) {
+      if (state.playerHp <= 0) return;
       state.currentRoomId = roomId;
       state.currentCamIndex = 0;
       state.visitedRooms.add(roomId);
@@ -1473,7 +1505,7 @@
       renderRoom();
     }
 
-    // --- WIN MODAL ---
+    // --- WIN & GAME OVER MODALS ---
     function triggerWinScreen() {
       const timeSec = Math.floor((Date.now() - state.startTime) / 1000);
       document.getElementById('winTime').textContent = `${timeSec}s`;
@@ -1481,6 +1513,15 @@
       document.getElementById('winEnemies').textContent = `${state.neutralizedEnemies.size}`;
       document.getElementById('winRooms').textContent = `${state.visitedRooms.size} / ${Object.keys(GAME_DATA.rooms).length}`;
       document.getElementById('winModal').classList.add('active');
+    }
+
+    function triggerGameOverScreen() {
+      const timeSec = Math.floor((Date.now() - state.startTime) / 1000);
+      document.getElementById('loseTime').textContent = `${timeSec}s`;
+      document.getElementById('loseItems').textContent = `${state.inventory.length} items`;
+      document.getElementById('loseEnemies').textContent = `${state.neutralizedEnemies.size}`;
+      document.getElementById('loseRooms').textContent = `${state.visitedRooms.size} / ${Object.keys(GAME_DATA.rooms).length}`;
+      document.getElementById('gameOverModal').classList.add('active');
     }
 
     // --- MAP OVERLAY ---
@@ -1522,6 +1563,7 @@
 
         if (isDiscovered && !isCurrent) {
           card.addEventListener('click', () => {
+            if (state.playerHp <= 0) return;
             playSound('door');
             changeRoom(room.room_id);
             document.getElementById('mapModal').classList.remove('active');
@@ -1549,6 +1591,7 @@
       state.logCount = 0;
       document.getElementById('logContent').innerHTML = '';
       document.getElementById('winModal').classList.remove('active');
+      document.getElementById('gameOverModal').classList.remove('active');
       addLog("Game reset to Prologue Alleyway.", "warning");
       updateInventoryUI();
       renderRoom();
@@ -1559,6 +1602,7 @@
       if (confirm("Reset current playtest session?")) resetGame();
     });
     document.getElementById('btnRestartWin').addEventListener('click', resetGame);
+    document.getElementById('btnRestartLose').addEventListener('click', resetGame);
 
     document.getElementById('btnAudioToggle').addEventListener('click', (e) => {
       state.soundEnabled = !state.soundEnabled;

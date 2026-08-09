@@ -53,8 +53,7 @@ Generates a complete, zero-dependency, single-file HTML5/JavaScript interactive 
 4. **NPC Interactions & Item Trades:** Clicking an NPC in a safe room opens dialogue and trade options (e.g. trading specific key items for quest progression or rewards).
 
 ### Step 5: Game State & Victory Conditions
-- Tracks `playerHP` (100 HP max), 5-slot `inventory`, `ammo`, `currentRoom`, `activeCameraIndex`, and cleared threat states.
-- **Loss Condition:** `playerHP <= 0` triggers Game Over with a Restart option.
+- **Loss Condition:** `playerHP <= 0` immediately halts game loops and player interactions, displays the Game Over Modal overlay (`gameOverModal`) featuring death metrics (time survived, items looted, threats slain, sectors reached), and presents a '🔄 Restart Game' button.
 - **Win Condition:** Reaching the final apex room (`RM_05_LOADING_DOCK`), restoring generator power, opening the motorized shutter, and boarding the escape boat triggers Scenario Complete.
 
 ### Step 6: Execution Output Format
