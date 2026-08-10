@@ -1,7 +1,7 @@
 ---
 name: point-and-click-prototype
 description: >-
-  Generates a standalone, zero-dependency, single-file HTML5/JavaScript interactive point-and-click browser game from completed concept art images, story.json, and threat configurations for rapid playtesting of camera-dependent hotspot visibility, 5-slot inventory item swapping (with item icons and container exchange), readable document files and lore memos (Document_Item_Node), persistent unlocked doors, targeted item usage with dropdown selection, weapon equipping, diegetic 2D floor map canvas with color-coded doors (red locked, green unlocked), animated zombie threat scaling (zombie_transparent.png / zombie_attack_transparent.png), safe room NPC interactions, and room navigation pacing.
+  Generates a standalone, zero-dependency, single-file HTML5/JavaScript interactive point-and-click browser game from completed concept art images, story.json, and threat configurations for rapid playtesting of camera-dependent hotspot visibility, 5-slot inventory item swapping (with item icons and container exchange), readable document files and lore memos (Document_Item_Node), persistent unlocked doors, targeted item usage with dropdown selection, weapon equipping, diegetic 2D floor map canvas with color-coded doors (red locked, green unlocked), animated zombie threat scaling (zombie_transparent.png / zombie_attack_transparent.png), direct tap combat with blood splash sprites & gunshot audio, safe room NPC interactions, and room navigation pacing.
 ---
 
 # SKILL: Generate Playable Point-and-Click Prototype (with Camera-Gated Hotspots & Threat Combat)
@@ -65,7 +65,7 @@ Generates a complete, zero-dependency, single-file HTML5/JavaScript interactive 
      - 🟢 **Green Thick Line (`#2ec4b6`)**: Unlocked door (traversable).
      - 🟡 **Gold Box (`#ffb703`)**: Active player room position.
 
-### Step 5: Camera-Gated Zombie Threats & Direct Tap Combat Mechanics
+### Step 5: Camera-Gated Zombie Threats, Direct Tap Combat & Blood Splash Audio
 1. **Single Camera Angle Binding:**
    - Zombies and enemies are bound to exactly ONE specific camera angle (`camIndex`) in a room.
    - The zombie sprite overlay appears and advances towards attack ONLY when the player is actively viewing its designated camera angle. Switching to another camera angle in the room hides the zombie from the viewport.
@@ -73,10 +73,14 @@ Generates a complete, zero-dependency, single-file HTML5/JavaScript interactive 
    - As the zombie approaches, `state.zombieScale` increases from 0.3 up to 1.0 (full proximity).
    - While moving close, the zombie sways horizontally left and right (`zombieOffsetX`) in a sinuous motion bounded comfortably within viewport boundaries.
    - **Persistent Proximity Scale:** Once the zombie reaches full scale (1.0), it DOES NOT reset back to small scale (0.3). It remains scaled up at close proximity and strikes the player repeatedly on a **cooldown timer** (e.g. every 1.8 seconds) as long as it lives!
-3. **Direct Tap / Click Canvas Combat:**
+3. **Direct Tap Canvas Combat:**
    - Combat requires the player to **tap/click directly on the zombie sprite overlay** on the viewport canvas!
+   - **Gunshot Audio FX:** Firing a weapon triggers an authentic synthesized gunshot sound effect using lowpass white-noise explosive buffers and rapid pitch drops (`playSound('shoot')`).
+   - **Blood Splash Sprite FX:**
+     - Scoring a direct hit spawns an animated **Blood Splash Sprite Overlay** (`state.bloodSplats`) right at the hit coordinates `(mx, my)`.
+     - Draws expanding dark gore cores, radial blood droplet spray particles, and floating `💥 BLOOD HIT!` impact text that fades out smoothly over 650ms.
    - **HIT:** Clicking on the zombie sprite with an equipped weapon consumes 1 ammo, deals damage to the zombie (`enemy.hp -= damage`), applies a minor scale knockback (`state.zombieScale -= 0.25`), and logs a direct hit event (`🎯 DIRECT HIT! Fired [Weapon] at [Zombie] for [DMG] DMG!`).
-   - **MISS:** Clicking off-target on the canvas background while a weapon is equipped STILL consumes 1 ammo and logs a missed shot event (`❌ MISSED! Fired [Weapon] off-target into background wall! 1 ammo wasted!`).
+   - **MISS:** Clicking off-target on the canvas background while a weapon is equipped STILL consumes 1 ammo, plays the gunshot sound, and logs a missed shot event (`❌ MISSED! Fired [Weapon] off-target into background wall! 1 ammo wasted!`).
 4. **Attacking Frame & Interruption:**
    - When striking, swap the sprite to `zombie_attack_transparent.png`, deal damage to player HP, and trigger blood screen flash.
    - **Interruption:** Any active item picking or inventory swapping process is immediately interrupted and cancelled when a zombie attack hits.

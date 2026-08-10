@@ -1993,6 +1993,7 @@
       lastZombieAttackTime: 0,
       zombieAttackCooldown: 1800,
       currentZombieBounds: null,
+      bloodSplats: [],
       
       startTime: Date.now(),
       logCount: 0,
@@ -2022,9 +2023,38 @@
           gain.gain.setValueAtTime(0.2, now); gain.gain.linearRampToValueAtTime(0.01, now + 0.12);
           osc.start(now); osc.stop(now + 0.12);
         } else if (type === 'shoot') {
-          osc.type = 'sawtooth'; osc.frequency.setValueAtTime(800, now); osc.frequency.exponentialRampToValueAtTime(40, now + 0.18);
-          gain.gain.setValueAtTime(0.35, now); gain.gain.linearRampToValueAtTime(0.01, now + 0.18);
-          osc.start(now); osc.stop(now + 0.18);
+          // Sharp explosive white noise punch + lowpass sweep for authentic gunshot blast
+          const bufferSize = Math.floor(audioCtx.sampleRate * 0.15);
+          const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.25));
+          }
+          const noise = audioCtx.createBufferSource();
+          noise.buffer = buffer;
+
+          const filter = audioCtx.createBiquadFilter();
+          filter.type = 'lowpass';
+          filter.frequency.setValueAtTime(3200, now);
+          filter.frequency.exponentialRampToValueAtTime(120, now + 0.15);
+
+          const noiseGain = audioCtx.createGain();
+          noiseGain.gain.setValueAtTime(0.5, now);
+          noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+
+          noise.connect(filter);
+          filter.connect(noiseGain);
+          noiseGain.connect(audioCtx.destination);
+          noise.start(now);
+
+          // Tone thump punch
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(450, now);
+          osc.frequency.exponentialRampToValueAtTime(30, now + 0.12);
+          gain.gain.setValueAtTime(0.4, now);
+          gain.gain.linearRampToValueAtTime(0.01, now + 0.12);
+          osc.start(now);
+          osc.stop(now + 0.12);
         } else if (type === 'attack') {
           osc.type = 'sawtooth'; osc.frequency.setValueAtTime(120, now); osc.frequency.exponentialRampToValueAtTime(40, now + 0.3);
           gain.gain.setValueAtTime(0.4, now); gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
@@ -2164,6 +2194,47 @@
         state.currentZombieBounds = null;
       }
 
+      // RENDER BLOOD SPLASH SPRITES ON HIT!
+      const nowMs = Date.now();
+      state.bloodSplats = (state.bloodSplats || []).filter(b => nowMs - b.startTime < b.duration);
+
+      state.bloodSplats.forEach(b => {
+        const elapsed = nowMs - b.startTime;
+        const progress = elapsed / b.duration;
+        const alpha = Math.max(0, 1.0 - progress);
+
+        ctx.save();
+        ctx.translate(b.x, b.y);
+
+        // Core blood burst splatter
+        ctx.fillStyle = `rgba(180, 0, 20, ${alpha * 0.9})`;
+        ctx.beginPath();
+        ctx.arc(0, 0, 18 * b.scale * (1 + progress * 0.5), 0, Math.PI * 2);
+        ctx.fill();
+
+        // Dark inner gore core
+        ctx.fillStyle = `rgba(90, 0, 10, ${alpha * 0.95})`;
+        ctx.beginPath();
+        ctx.arc(0, 0, 10 * b.scale, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Radial blood droplets spray
+        ctx.fillStyle = `rgba(220, 20, 40, ${alpha * 0.85})`;
+        b.particles.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.dx * (0.4 + progress * 0.8), p.dy * (0.4 + progress * 0.8), p.r * (1.0 - progress * 0.3), 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // Floating blood impact text
+        ctx.fillStyle = `rgba(255, 77, 77, ${alpha})`;
+        ctx.font = 'bold 15px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(`💥 BLOOD HIT!`, 0, -25 - progress * 20);
+
+        ctx.restore();
+      });
+
       // Update Top Status Bar & Threat Panel
       document.getElementById('displayRoomName').textContent = room.room_name;
       document.getElementById('displayObjective').textContent = room.objective_beat;
@@ -2282,7 +2353,7 @@
       });
     }
 
-    function attackZombieDirect(enemy) {
+    function attackZombieDirect(enemy, hitX, hitY) {
       if (!state.equippedWeaponId) {
         playSound('locked');
         addLog(`⚠️ No weapon equipped! Inspect a weapon in your 5-slot inventory and click 'Equip Weapon' first!`, 'warning');
@@ -2316,6 +2387,21 @@
       updateInventoryUI();
 
       playSound('shoot');
+
+      // Trigger Blood Splash Sprite Overlay at click hit position!
+      state.bloodSplats.push({
+        x: hitX || canvas.width / 2,
+        y: hitY || canvas.height / 2,
+        scale: 0.8 + Math.random() * 0.5,
+        startTime: Date.now(),
+        duration: 650,
+        particles: Array.from({ length: 12 }, () => ({
+          dx: (Math.random() - 0.5) * 90,
+          dy: (Math.random() - 0.5) * 90,
+          r: 3 + Math.random() * 7
+        }))
+      });
+
       enemy.hp -= damage;
       state.zombieScale = Math.max(0.3, state.zombieScale - 0.25); // Knockback zombie scale slightly!
       addLog(`🎯 DIRECT HIT! Fired ${weapon.name} at ${enemy.name} for ${damage} DMG! Zombie knocked back!`, 'danger');
@@ -2426,7 +2512,7 @@
       if (state.currentZombieBounds) {
         const zb = state.currentZombieBounds;
         if (mx >= zb.x && mx <= zb.x + zb.w && my >= zb.y && my <= zb.y + zb.h) {
-          attackZombieDirect(zb.enemy);
+          attackZombieDirect(zb.enemy, mx, my);
           return;
         }
       }
