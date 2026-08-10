@@ -638,44 +638,54 @@
 
   <!-- Win Modal -->
   <div class="modal-overlay" id="winModal">
-    <div class="modal-card" style="text-align: center;">
+    <div class="modal-card" style="text-align: center; max-width: 540px;">
       <div class="modal-header">
         <h3 style="color: var(--accent-green);">🎉 SURVIVAL HORROR ESCAPE COMPLETED!</h3>
       </div>
       <div class="modal-body">
-        <h2 style="font-size: 1.8rem; margin-bottom: 12px; color: #fff;">Blackwood High Evacuated!</h2>
-        <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 20px;">
-          You explored camera perspectives, managed your 5-slot inventory, defended against creeping zombies, restored dock generator breaker power, and escaped on the harbor boat!
+        <h2 style="font-size: 1.6rem; margin-bottom: 8px; color: #fff;">Blackwood High Evacuated!</h2>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 16px;">
+          You navigated camera views, managed your 5-slot inventory, cleared all wave threats, and escaped on the harbor boat!
         </p>
-        <div style="background: rgba(0,0,0,0.4); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color); text-align: left; margin-bottom: 20px;">
-          <p>⏱️ <strong>Playtest Duration:</strong> <span id="winTime">0s</span></p>
-          <p>🎒 <strong>Items Looted:</strong> <span id="winItems">0</span></p>
-          <p>👾 <strong>Enemies Neutralized:</strong> <span id="winEnemies">0</span></p>
-          <p>🗺️ <strong>Rooms Explored:</strong> <span id="winRooms">0 / 10</span></p>
+        <div style="background: rgba(0,0,0,0.4); padding: 14px 18px; border-radius: 8px; border: 1px solid var(--border-color); text-align: left; margin-bottom: 16px; font-size: 0.88rem; display: flex; flex-direction: column; gap: 6px;">
+          <div>⏱️ <strong>Playtest Duration:</strong> <span id="winTime" style="color:#fff; float:right;">0s</span></div>
+          <div>💥 <strong>Damage Taken:</strong> <span id="winDamageTaken" style="color:var(--accent-red); float:right;">0 HP</span></div>
+          <div>🎯 <strong>Damage Dealt:</strong> <span id="winDamageDealt" style="color:var(--accent-green); float:right;">0 DMG</span></div>
+          <div>💊 <strong>Healing Items Used:</strong> <span id="winHeals" style="color:var(--accent-gold); float:right;">0</span></div>
+          <div>📜 <strong>Documents Read:</strong> <span id="winDocs" style="color:#fff; float:right;">0 / 0</span></div>
+          <div>👨‍🏫 <strong>NPCs Interacted:</strong> <span id="winNpcs" style="color:#fff; float:right;">0 / 0</span></div>
+          <div style="border-top: 1px dashed var(--border-color); padding-top: 6px; margin-top: 4px; font-size: 1.05rem; font-weight: bold; color: var(--accent-gold);">
+            🏆 FINAL SCORE: <span id="winFinalScore" style="float:right; font-size:1.2rem;">0</span>
+          </div>
         </div>
-        <button class="btn btn-danger" id="btnRestartWin" style="padding: 10px 24px; font-size: 1rem; margin: 0 auto;">Play Again</button>
+        <button class="btn btn-danger" id="btnRestartWin" style="padding: 10px 24px; font-size: 0.95rem; margin: 0 auto;">Play Again</button>
       </div>
     </div>
   </div>
 
   <!-- Game Over Modal -->
   <div class="modal-overlay" id="gameOverModal">
-    <div class="modal-card" style="text-align: center; border-color: var(--accent-red);">
+    <div class="modal-card" style="text-align: center; border-color: var(--accent-red); max-width: 540px;">
       <div class="modal-header" style="background: rgba(255, 77, 77, 0.15);">
         <h3 style="color: var(--accent-red);">💀 YOU HAVE DIED!</h3>
       </div>
       <div class="modal-body">
-        <h2 style="font-size: 1.8rem; margin-bottom: 12px; color: #fff;">Fatal Threat Strike</h2>
-        <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 20px;">
+        <h2 style="font-size: 1.6rem; margin-bottom: 8px; color: #fff;">Fatal Threat Strike</h2>
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 16px;">
           Your HP reached 0 while exploring Blackwood High. The infected overrun your position.
         </p>
-        <div style="background: rgba(0,0,0,0.4); padding: 16px; border-radius: 8px; border: 1px solid var(--border-color); text-align: left; margin-bottom: 20px;">
-          <p>⏱️ <strong>Time Survived:</strong> <span id="loseTime">0s</span></p>
-          <p>🎒 <strong>Items Looted:</strong> <span id="loseItems">0</span></p>
-          <p>👾 <strong>Enemies Neutralized:</strong> <span id="loseEnemies">0</span></p>
-          <p>🗺️ <strong>Rooms Explored:</strong> <span id="loseRooms">0 / 10</span></p>
+        <div style="background: rgba(0,0,0,0.4); padding: 14px 18px; border-radius: 8px; border: 1px solid var(--border-color); text-align: left; margin-bottom: 16px; font-size: 0.88rem; display: flex; flex-direction: column; gap: 6px;">
+          <div>⏱️ <strong>Time Survived:</strong> <span id="loseTime" style="color:#fff; float:right;">0s</span></div>
+          <div>💥 <strong>Damage Taken:</strong> <span id="loseDamageTaken" style="color:var(--accent-red); float:right;">0 HP</span></div>
+          <div>🎯 <strong>Damage Dealt:</strong> <span id="loseDamageDealt" style="color:var(--accent-green); float:right;">0 DMG</span></div>
+          <div>💊 <strong>Healing Items Used:</strong> <span id="loseHeals" style="color:var(--accent-gold); float:right;">0</span></div>
+          <div>📜 <strong>Documents Read:</strong> <span id="loseDocs" style="color:#fff; float:right;">0 / 0</span></div>
+          <div>👨‍🏫 <strong>NPCs Interacted:</strong> <span id="loseNpcs" style="color:#fff; float:right;">0 / 0</span></div>
+          <div style="border-top: 1px dashed var(--border-color); padding-top: 6px; margin-top: 4px; font-size: 1.05rem; font-weight: bold; color: var(--accent-red);">
+            💀 FINAL SCORE: <span id="loseFinalScore" style="float:right; font-size:1.2rem;">0</span>
+          </div>
         </div>
-        <button class="btn btn-danger" id="btnRestartLose" style="padding: 10px 24px; font-size: 1rem; margin: 0 auto;">🔄 Restart Game</button>
+        <button class="btn btn-danger" id="btnRestartLose" style="padding: 10px 24px; font-size: 0.95rem; margin: 0 auto;">🔄 Restart Game</button>
       </div>
     </div>
   </div>
@@ -2001,11 +2011,27 @@
         ],
         "enemies": [
             {
-                "id": "zombie_dock_heavy_blocker",
-                "name": "Dock Heavy Blocker",
-                "hp": 250,
-                "maxHp": 250,
-                "icon": "\ud83e\udddf\u200d\u2642\ufe0f",
+                "id": "zombie_dock_wave_01",
+                "name": "Dock Wave 01",
+                "hp": 80,
+                "maxHp": 80,
+                "icon": "\ud83e\udddf",
+                "camIndex": 0
+            },
+            {
+                "id": "zombie_dock_wave_02",
+                "name": "Dock Wave 02",
+                "hp": 80,
+                "maxHp": 80,
+                "icon": "\ud83e\udddf",
+                "camIndex": 0
+            },
+            {
+                "id": "zombie_dock_wave_03",
+                "name": "Dock Wave 03",
+                "hp": 90,
+                "maxHp": 90,
+                "icon": "\ud83e\udddf",
                 "camIndex": 0
             }
         ]
@@ -2046,6 +2072,13 @@
       zombieAttackCooldown: 1800,
       currentZombieBounds: null,
       bloodSplats: [],
+      
+      // Gameplay Performance & Summary State
+      totalDamageTaken: 0,
+      totalDamageDealt: 0,
+      healingItemsUsed: 0,
+      documentsRead: new Set(),
+      npcsInteracted: new Set(),
       
       startTime: Date.now(),
       logCount: 0,
@@ -2294,6 +2327,11 @@
       document.getElementById('displayPlayerHp').textContent = `${state.playerHp}/${state.maxPlayerHp}`;
 
       renderThreatPanel();
+
+      // AUTO-REFRESH TARGET SELECTOR DROPDOWN ON VIEW/SCREEN CHANGE!
+      if (state.selectedSlotIndex !== null && state.inventory[state.selectedSlotIndex]) {
+        showItemInspect(state.inventory[state.selectedSlotIndex]);
+      }
     }
 
     // --- ZOMBIE APPROACH & ATTACK ANIMATION LOOP ---
@@ -2334,9 +2372,10 @@
       state.lastZombieAttackTime = Date.now();
       playSound('attack');
 
-      // Inflict damage to player
+      // Inflict damage to player & track total damage taken
       const dam = Math.floor(Math.random() * 15) + 15;
       state.playerHp = Math.max(0, state.playerHp - dam);
+      state.totalDamageTaken += dam;
       addLog(`💥 ${enemy.name} ATTACKED YOU! Took ${dam} damage!`, 'danger');
 
       // Trigger red blood flash on screen
@@ -2455,6 +2494,7 @@
       });
 
       enemy.hp -= damage;
+      state.totalDamageDealt += damage;
       state.zombieScale = Math.max(0.3, state.zombieScale - 0.25); // Knockback zombie scale slightly!
       addLog(`🎯 DIRECT HIT! Fired ${weapon.name} at ${enemy.name} for ${damage} DMG! Zombie knocked back!`, 'danger');
 
@@ -2588,6 +2628,7 @@
       // Document / Lore Note Reading
       if (hs.type === 'document') {
         playSound('pickup');
+        state.documentsRead.add(hs.id || hs.name || hs.title);
         showDocumentModal(hs.title || hs.name, hs.content || 'No text content recorded.', hs.icon || '📜');
         addLog(`📜 Read Document: [${hs.name || hs.title}]`, 'info');
         return;
@@ -2596,6 +2637,7 @@
       // NPC Safe Room Interaction
       if (hs.type === 'npc') {
         playSound('click');
+        state.npcsInteracted.add(hs.id || hs.name);
         document.getElementById('npcModal').classList.add('active');
         addLog(`Spoke with ${hs.name} in safe room.`, 'info');
         return;
@@ -2664,6 +2706,16 @@
           addLog(`Motorized shutter power off! Reactivate dock generator breaker console first!`, 'danger');
           return;
         }
+
+        // Win Lock Condition: Defeat all active/lurking zombies in loading dock before escaping!
+        const currentRoom = GAME_DATA.rooms[state.currentRoomId];
+        const activeEnemiesInRoom = (currentRoom.enemies || []).filter(e => !state.neutralizedEnemies.has(e.id));
+        if (activeEnemiesInRoom.length > 0) {
+          playSound('locked');
+          addLog(`⚠️ CANNOT ESCAPE YET! Defeat all ${activeEnemiesInRoom.length} creeping zombies in the loading dock yard before boarding the escape boat!`, 'warning');
+          return;
+        }
+
         playSound('win');
         triggerWinScreen();
         return;
@@ -2779,7 +2831,8 @@
         if (item) {
           slot.innerHTML = `
             <div class="item-icon">${item.icon || '📦'}</div>
-            <div class="item-name">${isEquipped ? '🗡️ ' : ''}${item.name}</div>
+            <div class="item-name">${item.name}</div>
+            ${isEquipped ? '<div style="font-size:0.68rem; color:var(--accent-gold); font-weight:bold; margin-top:2px; text-transform:uppercase;">[EQUIPPED]</div>' : ''}
             <div class="item-qty">x${item.quantity}</div>
           `;
         } else {
@@ -2832,6 +2885,7 @@
         btnUse.addEventListener('click', () => {
           if (state.playerHp <= 0) return;
           state.playerHp = Math.min(state.maxPlayerHp, state.playerHp + 40);
+          state.healingItemsUsed++;
           item.quantity--;
           if (item.quantity <= 0) {
             state.inventory = state.inventory.filter(i => i !== item);
@@ -2944,22 +2998,54 @@
       renderRoom();
     }
 
-    // --- WIN & GAME OVER MODALS ---
-    function triggerWinScreen() {
+    // --- WIN & GAME OVER MODALS & SUMMARY METRICS ---
+    function computeSummaryMetrics() {
+      let totalDocs = 0;
+      let totalNpcs = 0;
+
+      Object.values(GAME_DATA.rooms).forEach(r => {
+        (r.hotspots || []).forEach(h => {
+          if (h.type === 'document') totalDocs++;
+          if (h.type === 'npc') totalNpcs++;
+        });
+      });
+
       const timeSec = Math.floor((Date.now() - state.startTime) / 1000);
-      document.getElementById('winTime').textContent = `${timeSec}s`;
-      document.getElementById('winItems').textContent = `${state.inventory.length} items`;
-      document.getElementById('winEnemies').textContent = `${state.neutralizedEnemies.size}`;
-      document.getElementById('winRooms').textContent = `${state.visitedRooms.size} / ${Object.keys(GAME_DATA.rooms).length}`;
+      const timeScore = Math.max(0, 1500 - timeSec * 4);
+      const combatScore = Math.max(0, (state.totalDamageDealt * 2) - (state.totalDamageTaken * 3));
+      const explorationScore = (state.documentsRead.size * 300) + (state.npcsInteracted.size * 250);
+      const survivalBonus = Math.floor(state.playerHp * 15);
+      const finalScore = Math.max(0, timeScore + combatScore + explorationScore + survivalBonus);
+
+      return {
+        timeSec,
+        totalDocs,
+        totalNpcs,
+        finalScore
+      };
+    }
+
+    function triggerWinScreen() {
+      const stats = computeSummaryMetrics();
+      document.getElementById('winTime').textContent = `${stats.timeSec}s`;
+      document.getElementById('winDamageTaken').textContent = `${state.totalDamageTaken} HP`;
+      document.getElementById('winDamageDealt').textContent = `${state.totalDamageDealt} DMG`;
+      document.getElementById('winHeals').textContent = `${state.healingItemsUsed}`;
+      document.getElementById('winDocs').textContent = `${state.documentsRead.size} / ${stats.totalDocs}`;
+      document.getElementById('winNpcs').textContent = `${state.npcsInteracted.size} / ${stats.totalNpcs}`;
+      document.getElementById('winFinalScore').textContent = `${stats.finalScore.toLocaleString()}`;
       document.getElementById('winModal').classList.add('active');
     }
 
     function triggerGameOverScreen() {
-      const timeSec = Math.floor((Date.now() - state.startTime) / 1000);
-      document.getElementById('loseTime').textContent = `${timeSec}s`;
-      document.getElementById('loseItems').textContent = `${state.inventory.length} items`;
-      document.getElementById('loseEnemies').textContent = `${state.neutralizedEnemies.size}`;
-      document.getElementById('loseRooms').textContent = `${state.visitedRooms.size} / ${Object.keys(GAME_DATA.rooms).length}`;
+      const stats = computeSummaryMetrics();
+      document.getElementById('loseTime').textContent = `${stats.timeSec}s`;
+      document.getElementById('loseDamageTaken').textContent = `${state.totalDamageTaken} HP`;
+      document.getElementById('loseDamageDealt').textContent = `${state.totalDamageDealt} DMG`;
+      document.getElementById('loseHeals').textContent = `${state.healingItemsUsed}`;
+      document.getElementById('loseDocs').textContent = `${state.documentsRead.size} / ${stats.totalDocs}`;
+      document.getElementById('loseNpcs').textContent = `${state.npcsInteracted.size} / ${stats.totalNpcs}`;
+      document.getElementById('loseFinalScore').textContent = `${stats.finalScore.toLocaleString()}`;
       document.getElementById('gameOverModal').classList.add('active');
     }
 
@@ -3114,6 +3200,13 @@
       state.selectedSlotIndex = null;
       state.zombieScale = 0.3;
       state.zombieAttacking = false;
+      
+      state.totalDamageTaken = 0;
+      state.totalDamageDealt = 0;
+      state.healingItemsUsed = 0;
+      state.documentsRead.clear();
+      state.npcsInteracted.clear();
+      
       cancelItemSwapping();
       state.startTime = Date.now();
       state.logCount = 0;

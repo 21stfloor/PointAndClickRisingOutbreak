@@ -1,7 +1,7 @@
 ---
 name: point-and-click-prototype
 description: >-
-  Generates a standalone, zero-dependency, single-file HTML5/JavaScript interactive point-and-click browser game from completed concept art images, story.json, and threat configurations for rapid playtesting of camera-dependent hotspot visibility, 5-slot inventory item swapping (with item icons and container exchange), readable document files and lore memos (Document_Item_Node), persistent unlocked doors, targeted item usage with dropdown selection, weapon equipping, diegetic 2D floor map canvas with color-coded doors (red locked, green unlocked), animated zombie threat scaling (zombie_transparent.png / zombie_attack_transparent.png), direct tap combat with blood splash sprites & gunshot audio, safe room NPC interactions, and room navigation pacing.
+  Generates a standalone, zero-dependency, single-file HTML5/JavaScript interactive point-and-click browser game from completed concept art images, story.json, and threat configurations for rapid playtesting of camera-dependent hotspot visibility, 5-slot inventory item swapping (with item icons and container exchange), readable document files and lore memos (Document_Item_Node), persistent unlocked doors, targeted item usage with auto-updating dropdown selection, weapon equipping ([EQUIPPED] text badge), diegetic 2D floor map canvas with color-coded doors (red locked, green unlocked), animated zombie threat scaling (zombie_transparent.png / zombie_attack_transparent.png), direct tap combat with blood splash sprites & gunshot audio, safe room NPC interactions, multi-zombie boss waves with escape win locks, detailed end-game summary stats & scoring computation, and room navigation pacing.
 ---
 
 # SKILL: Generate Playable Point-and-Click Prototype (with Camera-Gated Hotspots & Threat Combat)
@@ -20,13 +20,16 @@ Generates a complete, zero-dependency, single-file HTML5/JavaScript interactive 
 - **Camera-Specific Interactables:** Every clickable hotspot (door, item, document, container, console) MUST be bound to a specific `camera_id` or active view angle.
 - Hotspots are rendered and interactive ONLY when the player has selected and is actively viewing that specific camera perspective. This forces the player to switch camera views to thoroughly inspect the room and discover hidden interactables.
 
-### Step 2: Inventory System (5-Slot Limit, Icons, Equip, Targeted Use & Container Drop)
+### Step 2: Inventory System (5-Slot Limit, Icons, [EQUIPPED] Badge, Targeted Use & Container Drop)
 1. **Strict 5-Slot Capacity:** Player inventory is capped at exactly 5 slots for physical items.
 2. **Item Icons:** Every item name in UI slots, swap banners, tooltips, and action logs MUST display its item emoji icon (e.g. `🔑 Rusted Padlock Key`, `🔫 9mm Handgun`, `🌿 Green Herb`).
-3. **Weapon Equipping:** Weapons (Handgun, Shotgun, Magnum) must be explicitly equipped from inventory before they can be used in combat. Tracks `state.equippedWeaponId`.
-4. **Targeted Item Usage & Dropdown Selection:**
+3. **Weapon Equipping & [EQUIPPED] Text Badge:**
+   - Weapons (Handgun, Shotgun, Magnum) must be explicitly equipped from inventory before they can be used in combat (`state.equippedWeaponId`).
+   - Equipped weapon slots in the 5-slot inventory grid MUST display an explicit **`[EQUIPPED]`** gold text badge underneath the item name instead of a sword icon.
+4. **Targeted Item Usage & Auto-Updating Dropdown Selection:**
    - Key items and tools (keys, keycards, lockpicks, fuses, chemical agents) must be used on specific targets.
    - When examining a key item in inventory, render a **Target Dropdown Menu** listing all visible interactables/doors in the active camera view.
+   - **Dynamic Target Selector Auto-Update:** When the player switches camera angles (`cam-btn`) or moves to a new screen/room (`changeRoom`), if an inventory item is currently inspected in the details panel, the target dropdown menu MUST automatically update to reflect the target objects visible on the new active screen view.
    - Clicking "🔑 Use Item on Target":
      - If the item matches the target's `required_key` (case-insensitive evaluation), it permanently unlocks/activates the target, logs a success event (`🔓 SUCCESS: Used [🔑 Key] on [Door]!`), and removes single-use items.
      - If the item does not match the target, it logs an explicit failure event (`❌ FAILED: Cannot use [🔑 Key] on [Desk]. It has no effect!`).
@@ -52,6 +55,7 @@ Generates a complete, zero-dependency, single-file HTML5/JavaScript interactive 
    - Clicking a document hotspot or inspecting a document item opens a dedicated **Document Reader Modal** (`documentModal`).
    - Renders a stylized parchment / computer terminal note card displaying document title, timestamp, icon, and full readable text narrative.
    - Logs document reading to action history: `📜 Read Document: [Security Guard Duty Memo]`.
+   - Tracks read document IDs in `state.documentsRead = new Set()` for summary stats.
 
 ### Step 4: Diegetic 2D Floor Map Canvas & Map Item Requirement
 1. **Map Item Required:**
@@ -65,36 +69,49 @@ Generates a complete, zero-dependency, single-file HTML5/JavaScript interactive 
      - 🟢 **Green Thick Line (`#2ec4b6`)**: Unlocked door (traversable).
      - 🟡 **Gold Box (`#ffb703`)**: Active player room position.
 
-### Step 5: Camera-Gated Zombie Threats, Direct Tap Combat & Blood Splash Audio
+### Step 5: Camera-Gated Zombie Threats, Direct Tap Combat & Multi-Zombie Boss Waves
 1. **Single Camera Angle Binding:**
-   - Zombies and enemies are bound to exactly ONE specific camera angle (`camIndex`) in a room.
+   - Zombies and enemies are bound to specific camera angles (`camIndex`) in a room.
    - The zombie sprite overlay appears and advances towards attack ONLY when the player is actively viewing its designated camera angle. Switching to another camera angle in the room hides the zombie from the viewport.
-2. **Left-Right Swaying & Scale Persistence:**
+2. **Multi-Zombie Wave Spawns & Balanced Ammo Allocation:**
+   - In apex/boss rooms (e.g., `RM_05_LOADING_DOCK`), replace single heavy enemies with multiple wave zombies spawning at staggered intervals across camera angles.
+   - Ensure containers across the level supply balanced ammunition reserves (e.g. 50x Handgun rounds, 10x Shotgun shells, 7x Magnum rounds) providing ~2,500+ total damage capacity, guaranteeing the player can clear all threats.
+3. **Left-Right Swaying & Scale Persistence:**
    - As the zombie approaches, `state.zombieScale` increases from 0.3 up to 1.0 (full proximity).
    - While moving close, the zombie sways horizontally left and right (`zombieOffsetX`) in a sinuous motion bounded comfortably within viewport boundaries.
    - **Persistent Proximity Scale:** Once the zombie reaches full scale (1.0), it DOES NOT reset back to small scale (0.3). It remains scaled up at close proximity and strikes the player repeatedly on a **cooldown timer** (e.g. every 1.8 seconds) as long as it lives!
-3. **Direct Tap Canvas Combat:**
+4. **Direct Tap Canvas Combat:**
    - Combat requires the player to **tap/click directly on the zombie sprite overlay** on the viewport canvas!
    - **Gunshot Audio FX:** Firing a weapon triggers an authentic synthesized gunshot sound effect using lowpass white-noise explosive buffers and rapid pitch drops (`playSound('shoot')`).
    - **Blood Splash Sprite FX:**
      - Scoring a direct hit spawns an animated **Blood Splash Sprite Overlay** (`state.bloodSplats`) right at the hit coordinates `(mx, my)`.
      - Draws expanding dark gore cores, radial blood droplet spray particles, and floating `💥 BLOOD HIT!` impact text that fades out smoothly over 650ms.
-   - **HIT:** Clicking on the zombie sprite with an equipped weapon consumes 1 ammo, deals damage to the zombie (`enemy.hp -= damage`), applies a minor scale knockback (`state.zombieScale -= 0.25`), and logs a direct hit event (`🎯 DIRECT HIT! Fired [Weapon] at [Zombie] for [DMG] DMG!`).
+   - **HIT:** Clicking on the zombie sprite with an equipped weapon consumes 1 ammo, deals damage to the zombie (`enemy.hp -= damage`), tracks total damage dealt (`state.totalDamageDealt += damage`), applies a minor scale knockback (`state.zombieScale -= 0.25`), and logs a direct hit event (`🎯 DIRECT HIT! Fired [Weapon] at [Zombie] for [DMG] DMG!`).
    - **MISS:** Clicking off-target on the canvas background while a weapon is equipped STILL consumes 1 ammo, plays the gunshot sound, and logs a missed shot event (`❌ MISSED! Fired [Weapon] off-target into background wall! 1 ammo wasted!`).
-4. **Attacking Frame & Interruption:**
-   - When striking, swap the sprite to `zombie_attack_transparent.png`, deal damage to player HP, and trigger blood screen flash.
+5. **Attacking Frame & Interruption:**
+   - When striking, swap the sprite to `zombie_attack_transparent.png`, deal damage to player HP (`state.playerHp -= dam`), track total damage taken (`state.totalDamageTaken += dam`), and trigger blood screen flash.
    - **Interruption:** Any active item picking or inventory swapping process is immediately interrupted and cancelled when a zombie attack hits.
 
 ### Step 6: Safe Room & NPC Rules
 1. **No NPCs in Hallways:** NPCs are strictly prohibited in transit hallways or corridors.
 2. **No NPCs in Threat Rooms:** NPCs must NEVER spawn in rooms containing active or lurking zombies.
 3. **Safe Room Only Placement:** NPCs are placed strictly inside designated Safe Rooms (rooms with zero enemy spawns).
-4. **NPC Interactions & Item Trades:** Clicking an NPC in a safe room opens dialogue and trade options.
+4. **NPC Interactions & Tracking:** Clicking an NPC in a safe room opens dialogue and trade options, and tracks unique NPC interactions in `state.npcsInteracted = new Set()`.
 
-### Step 7: Game State, Loss & Victory Conditions
-- Tracks `playerHP` (100 HP max), 5-slot `inventory`, `equippedWeaponId`, `unlockedDoors`, `hasMapPickedUp`, `ammo`, `currentRoom`, `activeCameraIndex`, and cleared threat states.
-- **Loss Condition:** `playerHP <= 0` immediately halts game loops and player interactions, displays the Game Over Modal overlay (`gameOverModal`) featuring death metrics (time survived, items looted, threats slain, sectors reached), and presents a '🔄 Restart Game' button.
-- **Win Condition:** Reaching the final apex room (`RM_05_LOADING_DOCK`), restoring generator power, opening the motorized shutter, and boarding the escape boat triggers Scenario Complete.
+### Step 7: Game State, Victory Win Lock & Summary Scoring Computation
+- Tracks `playerHP` (100 HP max), 5-slot `inventory`, `equippedWeaponId`, `unlockedDoors`, `hasMapPickedUp`, `ammo`, `currentRoom`, `activeCameraIndex`, `totalDamageTaken`, `totalDamageDealt`, `healingItemsUsed`, `documentsRead`, `npcsInteracted`, and cleared threat states.
+- **Escape Win Lock Check:**
+  - Boarding the escape boat or triggering final evacuation (`win_trigger`) checks if all un-neutralized zombies in the current sector (`RM_05_LOADING_DOCK`) are defeated.
+  - If any active zombies remain in the room, access is blocked and an alert is logged: `⚠️ CANNOT ESCAPE YET! Defeat all X creeping zombies in the loading dock yard before boarding the escape boat!`.
+- **End-Game Summary & Final Computed Score:**
+  - Upon completing victory or suffering defeat, render the game summary metrics modal (`winModal` / `gameOverModal`):
+    - ⏱️ **Playtest Duration** (seconds)
+    - 💥 **Total Damage Taken** (`state.totalDamageTaken`)
+    - 🎯 **Total Damage Dealt** (`state.totalDamageDealt`)
+    - 💊 **Healing Items Used** (`state.healingItemsUsed`)
+    - 📜 **Documents Read** (`${state.documentsRead.size} / ${totalDocs}`)
+    - 👨‍🏫 **NPCs Interacted** (`${state.npcsInteracted.size} / ${totalNpcs}`)
+    - 🏆 **FINAL COMPUTED SCORE:** Calculated dynamically based on completion time, damage dealt, damage taken penalty, document/NPC exploration bonuses, and remaining survival health.
 
 ### Step 8: Execution Output Format
 When instructed to output a prototype, produce the complete, self-contained HTML/CSS/JS file ready to be saved as `playtest_prototype.html` and opened directly in any browser.
