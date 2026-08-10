@@ -65,19 +65,21 @@ Generates a complete, zero-dependency, single-file HTML5/JavaScript interactive 
      - 🟢 **Green Thick Line (`#2ec4b6`)**: Unlocked door (traversable).
      - 🟡 **Gold Box (`#ffb703`)**: Active player room position.
 
-### Step 5: Camera-Gated Zombie Threats & Combat Mechanics
+### Step 5: Camera-Gated Zombie Threats & Direct Tap Combat Mechanics
 1. **Single Camera Angle Binding:**
    - Zombies and enemies are bound to exactly ONE specific camera angle (`camIndex`) in a room.
    - The zombie sprite overlay appears and advances towards attack ONLY when the player is actively viewing its designated camera angle. Switching to another camera angle in the room hides the zombie from the viewport.
-2. **Animated Approach (`zombie_transparent.png`):**
-   - When viewing the camera angle containing an active zombie, render `zombie_transparent.png` overlaid on the room viewport.
-   - Scale the zombie image up gradually over time to visually represent the zombie creeping/advancing closer to the player on that camera view.
-3. **Attacking Frame (`zombie_attack_transparent.png`):**
-   - When the zombie reaches attack range or strikes, swap the sprite to `zombie_attack_transparent.png` to show the attack frame.
-   - Inflict damage on player HP and trigger a camera shake/blood flash, then revert back to default state or retreat.
+2. **Left-Right Swaying & Scale Persistence:**
+   - As the zombie approaches, `state.zombieScale` increases from 0.3 up to 1.0 (full proximity).
+   - While moving close, the zombie sways horizontally left and right (`zombieOffsetX`) in a sinuous motion bounded comfortably within viewport boundaries.
+   - **Persistent Proximity Scale:** Once the zombie reaches full scale (1.0), it DOES NOT reset back to small scale (0.3). It remains scaled up at close proximity and strikes the player repeatedly on a **cooldown timer** (e.g. every 1.8 seconds) as long as it lives!
+3. **Direct Tap / Click Canvas Combat:**
+   - Combat requires the player to **tap/click directly on the zombie sprite overlay** on the viewport canvas!
+   - **HIT:** Clicking on the zombie sprite with an equipped weapon consumes 1 ammo, deals damage to the zombie (`enemy.hp -= damage`), applies a minor scale knockback (`state.zombieScale -= 0.25`), and logs a direct hit event (`🎯 DIRECT HIT! Fired [Weapon] at [Zombie] for [DMG] DMG!`).
+   - **MISS:** Clicking off-target on the canvas background while a weapon is equipped STILL consumes 1 ammo and logs a missed shot event (`❌ MISSED! Fired [Weapon] off-target into background wall! 1 ammo wasted!`).
+4. **Attacking Frame & Interruption:**
+   - When striking, swap the sprite to `zombie_attack_transparent.png`, deal damage to player HP, and trigger blood screen flash.
    - **Interruption:** Any active item picking or inventory swapping process is immediately interrupted and cancelled when a zombie attack hits.
-4. **Weapon Defense:**
-   - Equipping weapons and spending ammo lets the player shoot approaching zombies when viewing their camera screen.
 
 ### Step 6: Safe Room & NPC Rules
 1. **No NPCs in Hallways:** NPCs are strictly prohibited in transit hallways or corridors.

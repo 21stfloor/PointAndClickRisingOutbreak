@@ -2037,10 +2037,14 @@
       isSwapping: false,
       pendingItem: null,
       
-      // Zombie Scaling Animation State
+      // Zombie Motion & Attack Cooldown State
       zombieScale: 0.3,
+      zombieOffsetX: 0,
+      zombieSwayAngle: 0,
       zombieAttacking: false,
-      zombieAttackTimer: null,
+      lastZombieAttackTime: 0,
+      zombieAttackCooldown: 1800,
+      currentZombieBounds: null,
       
       startTime: Date.now(),
       logCount: 0,
@@ -2194,14 +2198,22 @@
         if (currentZombieImg.complete) {
           const zWidth = 240 * state.zombieScale;
           const zHeight = 320 * state.zombieScale;
-          const zX = (canvas.width - zWidth) / 2;
+          const minX = 20;
+          const maxX = canvas.width - zWidth - 20;
+          const baseCenterX = (canvas.width - zWidth) / 2;
+          const zX = Math.max(minX, Math.min(maxX, baseCenterX + state.zombieOffsetX));
           const zY = canvas.height - zHeight;
+
+          // Track active zombie bounds for direct canvas tap combat!
+          state.currentZombieBounds = { x: zX, y: zY, w: zWidth, h: zHeight, enemy: activeEnemies[0] };
 
           ctx.save();
           ctx.globalAlpha = Math.min(1.0, state.zombieScale * 1.2);
           ctx.drawImage(currentZombieImg, zX, zY, zWidth, zHeight);
           ctx.restore();
         }
+      } else {
+        state.currentZombieBounds = null;
       }
 
       // Update Top Status Bar & Threat Panel
@@ -2217,27 +2229,38 @@
     setInterval(() => {
       const room = GAME_DATA.rooms[state.currentRoomId];
       if (!room) return;
-      // Zombie advances ONLY when player is looking at the zombie's camera screen!
+      
       const activeEnemies = (room.enemies || []).filter(e => !state.neutralizedEnemies.has(e.id) && (e.camIndex ?? 0) === state.currentCamIndex);
 
       if (activeEnemies.length > 0 && state.playerHp > 0) {
-        if (!state.zombieAttacking) {
-          // Scale zombie gradually up to show it approaching!
-          state.zombieScale += 0.04;
-          if (state.zombieScale >= 1.0) {
-            // Trigger Zombie Attack!
-            executeZombieAttack(activeEnemies[0]);
-          }
+        // 1. Advance zombie scale up to max 1.0 (DO NOT reset scale on attack!)
+        if (state.zombieScale < 1.0) {
+          state.zombieScale = Math.min(1.0, state.zombieScale + 0.03);
+        }
+
+        // 2. Left-Right Swaying while approaching or standing close!
+        state.zombieSwayAngle += 0.2;
+        const maxSway = Math.min(160, canvas.width / 2 - 80);
+        state.zombieOffsetX = Math.sin(state.zombieSwayAngle) * (maxSway * (state.zombieScale / 1.0));
+
+        // 3. Attack when near enough (scale >= 0.95) with cooldown!
+        const now = Date.now();
+        if (state.zombieScale >= 0.95 && (now - state.lastZombieAttackTime >= state.zombieAttackCooldown)) {
+          executeZombieAttack(activeEnemies[0]);
+        } else {
           renderRoom();
         }
       } else {
         state.zombieScale = 0.3;
+        state.zombieOffsetX = 0;
         state.zombieAttacking = false;
+        state.currentZombieBounds = null;
       }
-    }, 200);
+    }, 150);
 
     function executeZombieAttack(enemy) {
       state.zombieAttacking = true;
+      state.lastZombieAttackTime = Date.now();
       playSound('attack');
 
       // Inflict damage to player
@@ -2263,12 +2286,11 @@
         return;
       }
 
-      // Reset zombie attack frame after 700ms
+      // Revert attack frame after 500ms (KEPT NEAR AT FULL SCALE!)
       setTimeout(() => {
         state.zombieAttacking = false;
-        state.zombieScale = 0.3;
         renderRoom();
-      }, 700);
+      }, 500);
     }
 
     // --- THREAT & COMBAT SYSTEM ---
@@ -2306,16 +2328,13 @@
             <div style="font-weight:700; font-size:0.82rem; color:#fff;">${e.icon} ${e.name}</div>
             <div style="font-size:0.73rem; color:var(--accent-red);">HP: ${e.hp} / ${e.maxHp}</div>
           </div>
-          <button class="btn btn-danger" style="font-size:0.75rem; padding:3px 8px;">⚔️ Shoot Zombie</button>
+          <div style="font-size:0.72rem; color:var(--accent-gold); font-weight:bold; background:rgba(255,183,3,0.15); padding:4px 8px; border-radius:4px; border:1px dashed var(--accent-gold);">🎯 Tap Zombie Sprite on Screen to Shoot!</div>
         `;
-        card.querySelector('button').addEventListener('click', () => attackEnemy(e));
         panel.appendChild(card);
       });
     }
 
-    function attackEnemy(enemy) {
-      if (state.playerHp <= 0) return;
-
+    function attackZombieDirect(enemy) {
       if (!state.equippedWeaponId) {
         playSound('locked');
         addLog(`⚠️ No weapon equipped! Inspect a weapon in your 5-slot inventory and click 'Equip Weapon' first!`, 'warning');
@@ -2338,7 +2357,7 @@
       const ammoItem = state.inventory.find(i => i.item_id === ammoId);
       if (!ammoItem || ammoItem.quantity <= 0) {
         playSound('locked');
-        addLog(`Out of ammunition for ${weapon.name}! Search containers for ammo!`, 'warning');
+        addLog(`⚠️ Out of ammunition for ${weapon.name}! Search containers for ammo!`, 'warning');
         return;
       }
 
@@ -2350,15 +2369,43 @@
 
       playSound('shoot');
       enemy.hp -= damage;
-      state.zombieScale = Math.max(0.3, state.zombieScale - 0.3); // Knockback zombie!
-      addLog(`Fired ${weapon.name} at ${enemy.name} for ${damage} DMG! Zombie knocked back!`, 'danger');
+      state.zombieScale = Math.max(0.3, state.zombieScale - 0.25); // Knockback zombie scale slightly!
+      addLog(`🎯 DIRECT HIT! Fired ${weapon.name} at ${enemy.name} for ${damage} DMG! Zombie knocked back!`, 'danger');
 
       if (enemy.hp <= 0) {
         state.neutralizedEnemies.add(enemy.id);
         state.zombieScale = 0.3;
-        addLog(`Neutralized threat: ${enemy.name}! Sector secured.`, 'success');
+        state.zombieOffsetX = 0;
+        state.currentZombieBounds = null;
+        addLog(`🎉 Neutralized threat: ${enemy.name}! Sector secured.`, 'success');
       }
 
+      renderRoom();
+    }
+
+    function fireMissedShot() {
+      const weapon = state.inventory.find(i => i.item_id === state.equippedWeaponId);
+      if (!weapon) return;
+
+      let ammoId = 'ammo_handgun';
+      if (weapon.item_id === 'weapon_shotgun') ammoId = 'ammo_shotgun_shells';
+      if (weapon.item_id === 'weapon_magnum') ammoId = 'ammo_magnum';
+
+      const ammoItem = state.inventory.find(i => i.item_id === ammoId);
+      if (!ammoItem || ammoItem.quantity <= 0) {
+        playSound('locked');
+        addLog(`⚠️ Clicked screen but out of ammunition for ${weapon.name}!`, 'warning');
+        return;
+      }
+
+      ammoItem.quantity--;
+      if (ammoItem.quantity <= 0) {
+        state.inventory = state.inventory.filter(i => i.item_id !== ammoId);
+      }
+      updateInventoryUI();
+
+      playSound('shoot');
+      addLog(`❌ MISSED! Fired ${weapon.name} off-target into background wall! 1 ammo wasted!`, 'warning');
       renderRoom();
     }
 
@@ -2413,10 +2460,33 @@
       renderRoom();
     });
 
-    canvas.addEventListener('click', () => {
+    canvas.addEventListener('click', (e) => {
       if (state.playerHp <= 0) return;
-      if (!hoveredHotspot) return;
-      handleHotspotClick(hoveredHotspot);
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const mx = (e.clientX - rect.left) * scaleX;
+      const my = (e.clientY - rect.top) * scaleY;
+
+      // 1. Hotspot Click Priority (Doors, Items, Containers, Documents, Consoles, NPCs)
+      if (hoveredHotspot) {
+        handleHotspotClick(hoveredHotspot);
+        return;
+      }
+
+      // 2. Direct Tap Combat Priority: Check if tapping zombie sprite on screen!
+      if (state.currentZombieBounds) {
+        const zb = state.currentZombieBounds;
+        if (mx >= zb.x && mx <= zb.x + zb.w && my >= zb.y && my <= zb.y + zb.h) {
+          attackZombieDirect(zb.enemy);
+          return;
+        }
+      }
+
+      // 3. MISSED SHOT: Player tapped viewport off-target with equipped weapon!
+      if (state.equippedWeaponId) {
+        fireMissedShot();
+      }
     });
 
     // ESC KEY CANCELS PICKING/SWAPPING
