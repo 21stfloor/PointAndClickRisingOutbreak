@@ -1,0 +1,70 @@
+The Back Half Problems of Horror Design - Game Wisdom
+Josh Bycer
+10–12 minutes
+
+Horror design is the subject of my next book and having played so many examples lately, I’ve noticed a problematic trend in their design. Even the very best examples like Resident Evil 4, 7, Silent Hill, and so on fall plague to a poor back half and I want to talk about the issues of pacing when it comes to horror design.
+Fear of the Unknown
+
+As H.P. Lovecraft put it: ” The oldest and strongest emotion of mankind is fear, and the oldest and strongest kind of fear is fear of the unknown.” The start of any horror game is often the best part of it, as the player has no expectations as to what’s coming or what awaits them in the next room. Some of the most famous examples of horror in videogames have been in these early parts of a game — the Cerberus breaking through the window in Resident Evil, the arrival of Pyramid Head in Silent Hill 2, the Xenomorph in Alien Isolation, and there are far more examples.
+
+There is something special about playing a horror game completely blind for the first time: that sense that you have no idea what’s going on or the rules for how things work. I remember being blown away by both Resident Evil 4 and Resident Evil 7 when I played their respective demos. Besides the unknown, there is another reason why the first half of a horror game is so memorable.
+The “Survival” of Survival Horror
+
+Every horror game always starts the player the same way: weak and helpless. Even games that offer the player a weapon like Resident Evil or Dead Space aren’t giving you the means to fight back, but the means to survive. The first part of any horror game is about struggling with the limited resources and options available.
+
+Resident Evil 1 Remake took this even further with one of the best enemies in any horror game: Crimson Head Zombies. Zombies would revive stronger if you didn’t decapitate or burn their bodies. At the start, your only way to deal with zombies permanently was with the lighter and canteen oil. You couldn’t get an easy way to stop them until acquiring the shotgun or grenade launcher, which would take some time for new players.
+
+One of the biggest game-changers of horror in my opinion was the ability for enemies to roam in Resident Evil 2 and 3 Remake and the general changes to zombies. Technical limitations for the longest time have prevented enemies from leaving their predefined rooms or areas. With these two games, zombies who are chasing the player can move between rooms — increasing their threat and making it harder to just avoid them. Combine that with the increased durability of zombies, and it made the iconic enemy the most dangerous they’ve been in some time.
+
+horror
+
+Crimson head zombies forced players to adapt and weigh the risks of fighting in the early parts of the game
+
+With low ammo and healing resources, the beginning of a horror game is an always tense affair: forcing the player to decide when to fight and when to avoid. Unfortunately, whether your game has combat or not, horror tends to fail when it comes to sticking the landing and ending on a high note.
+The Back Half Problem
+
+Horror by its very design is not meant for a lengthy period. You can only scare someone for so long before they become used to it. In the first section of this piece, I spoke about the fear of the unknown which is a major part of my upcoming next book on design “Game Design Deep Dive: Horror.” The goal of a horror designer is to keep the player in the dark for as long as possible, because once they know what to expect, they’re never going to feel scared again.
+
+The problem is that there is only so much value you can get out of your mechanics and story before they start to wear thin. This was a common criticism of Alien Isolation and how it felt that the game went on for too long. Tonal changes are also an issue and something the Resident Evil series has had since the first one. Every game has that moment when horror gets thrown out the window that occurs at the final quarter/half of the game. I really enjoyed the first half of Resident Evil 7 but lose any desire to play the ship and mine area that occurs after the Jack fight.
+
+For survival and action-horror, by the time the player reaches the final act of the game, they should be loaded for bear in terms of weapons and healing items. In story-driven games that don’t have a lot of mechanic depth, these games often just repeat the same situations and challenges but in a different environment. If you snuck around an enemy at one point, chances are you are going to do it the same way again and again. Often, these games can feel like padding out the game time by introducing an out of nowhere betrayal, or something breaks down at the last second that forces the player to go on yet another task.
+
+The solution is something that is very hard to do right: Escalation. If you want to keep the player being scared, then new challenges or situations must be introduced to keep the game from becoming routine. This is not about throwing more combat at them, or making what’s already there harder, but actively introducing something new to throw the player off. With Resident Evil 7, no new enemies were added in the final areas, and the final challenge is just a straight-up gauntlet fight. Action games often work well in terms of engagement because every new enemy, boss, or area, is a brand-new element to keep the player guessing.
+
+horror
+
+Capcom knows that the RE formula can’t sustain horror for the entire play, and often turn into blockbuster action pieces by the end
+
+The penultimate area of Resident Evil Village works far better compared to the ship or mine from Re7. The factory has its own unique set of enemies and obstacles not seen prior. However, by this point in the game, the player should have most of Ethan’s upgrades and their weapons upgraded to compensate for the difficulty.
+
+With all the horror games I’ve played while doing research, there is just one that managed to do this right.
+Yep to Yuppie
+
+Yuppie Psycho is an indie horror game released in 2019 by Baroque Decay. The story is that we have been hired by a company to find and kill a witch that has corrupted the building and its employees for years. The game does not feature direct combat, but the player must manage recovery items while avoiding the many threats in the office space.
+
+For the first half of the game, the player is treated to disturbing sights and enemies as they explore for clues and the items needed to fight the witch, and the game is set up as a mission structure to uncover the grand mystery of it all. However, that is not what happens and to explain the twist, I need to spoil a little bit of the game.
+
+SPOILER WARNING FOR YUPPIE PSYCHO
+
+After exploring the major areas of the building, it seems like the player has found the clues they need to reveal more of the plot, but they are delayed by an event. What ends up happening is that the player is outed as a witch hunter and the entire building goes on a rampage killing everyone and leading to a dramatic chase and escape sequence.
+
+END OF SPOILERS
+
+While the back-half of Yuppie Psycho takes place in the same environment as the first part, everything is changed. New threats make themselves known, most of the building has been destroyed and is no longer accessible, and the game introduces new situations and puzzles for the final quarter. And that doesn’t even include the new content that was added as DLC that goes into another different area complete with unique puzzles and endings.
+
+Instead of just repeating what the game had already done, the developers escalate and change the game for the final parts. For me, this is a great example of a horror game that manages to keep things suspenseful from beginning to end. A game should only keep going if you can keep providing new content, and not just repeat what’s already there but harder. Once someone starts to feel bored or annoyed at a horror game, any attempt at scaring them is gone.
+
+horror
+
+Despite having a basic gameplay loop, Yuppie Psycho keeps the player guessing as to where it all leads from beginning to end
+
+The difficulty of Yuppie Psycho doesn’t really get higher in the final quarter, there are just new things for you to discover and deal with. And that last point is important for developers to understand — Escalation is not always about difficulty but doing new and different things that mix things up.
+Knowing When to End
+
+The problem with horror design is that it’s not really built for continued escalation in the same way as action or RPG design is. The only way to keep things from becoming repetitive is to completely design new elements and challenges, which can be out of the scope for a horror designer. Therefore, most Resident Evil games just say, “screw it” and end with some crazy set-piece… and something probably blowing up.
+
+One of the advantages of micro horror games is that they are often just long enough to show off their core concept, and then they’re over before things start to feel repetitive. However, if someone wants more to see and experience, that won’t be an option for obvious reasons.
+
+Recently, I played Resident Evil Village, and this may be the first time in a RE game that I found the back half stronger than the first. The game’s structure creates different acts that have unique situations and encounters, as opposed to a singular — or few situations — of RE 7. However, it still has that issue that instead of maintaining horror, the final quarter of the game trades it all for action set pieces and crazy boss fights.
+
+Just remember that the more you expose the player to the same scares or situations, the less effective they become. At the end of the day, horror is about quality over quantity, and you want the game to end memorably and not as a slog.

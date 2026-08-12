@@ -1,0 +1,57 @@
+The Balancing Act of Tension in Horror Game Design - Game Wisdom
+Josh Bycer
+6–7 minutes
+
+Playing through a Machine for Pigs, I was left completely bored with the proceedings. And part of the issue that has also found its way into other horror games is the concept of tension and knowing when to build it up and when to release it.
+
+game design
+A Horrendous Pace:
+
+Tension is another word for pacing in horror games and  something I’ve talked about in an earlier post. When we talk about creating tension, we’re referring to instilling that sense of dread in the player. That feeling that the player doesn’t want to keep playing or exploring because things are too scary.
+
+There are many, many ways to add tension to your game: Random noises, enemies darting in the darkness, that damn radio from Silent Hill and so on. The point and what horror legends like Alfred Hitchcock knew about is that the scariest thing for someone is the unknown. Letting someone’s imagination run away with them is one of the best ways of producing terror in any medium.
+
+Raise your hand if while playing a horror game that you were so tense that you fired your weapon blindly at some random sound in the dark. Controlling the pace is all about building that tension and letting the player psyche themselves out while waiting for the right moment to shock the player or release the tension.
+
+You can see examples of releasing the tension in just about every horror movie ever made when the monster, psychopath or big bad guy appears on screen for the first time, usually followed by some shocking music and killing someone.
+
+The point about the correct use of tension is that there must always be a build up followed by a release, you can’t just do one or the other for horror to work. In action horror games there is no build up as the player is constantly assaulted by random monsters to the point of becoming used to it. While in horror games like a Machine for Pigs, there is no release of the tension and eventually the player calms down and doesn’t become tense anymore.
+
+game design
+
+Horror games like Dead Space assault the player so often that the tension doesn’t build up.
+
+The big problem with video games compared to other mediums with creating tension is that they have a hard time sustaining or repeating the process.
+
+When you watch a horror movie, a good one is paced to keep a balance between raising the tension and releasing it at specific points during the running time.
+
+With a video game however, there is no set time and the designer has to play it by ear which makes creating an effective pace difficult.
+Raising the Stakes:
+
+As we’ve talked about, pacing and tension go hand in hand to deliver a horror experience and is something that video games have trouble with. While any good horror game can at least build and release the tension at least one, doing it multiple times is where most video games slip up on.
+
+The problem is that video games are only designed with a limited set of mechanics which creates a constraint on what the designer can do to scare the player. The first time that dog jumped through a window in Resident Evil scared the crap out of a lot of people, repeated plays not so much.
+
+There are two sides to this problem based on whether the game is action based or story based. For action games like Dead Space, no matter how many new enemies you introduce, they all follow the same basic strategy to kill them which means there is no build up of tension with new situations.
+
+While in story based games like Amnesia, any new enemies or environments are based around the same set of limited mechanics so there is still no release of tension when something new appears.
+
+In either case, it’s possible for the developer to have a moment when they release the tension despite the issues mentioned. However it is less likely they will be able to do it again due to the problems.
+
+Game Design
+
+While story focused horror titles keep building up the tension but fail to release it and shock the player.
+
+This is why the best games to deliver horror stay away from pure storytelling or pure action as both aspects of tension need time.
+
+Good pacing is one of the reasons why I love John Carpenter’s remake of The Thing as it was brilliantly paced: delivering on moments of horror when the creatures attack, but had plenty of slower moments to build up the tension as they were searching for the thing.
+
+What’s interesting about The Thing is that they were able to release and build tension even though the threat never really changed in the sense that they weren’t fighting new creatures or new situations. Instead the situation they were in gradually got worse despite their knowledge growing and that made each new reveal of the thing a major tense releaser.
+Balancing Tension:
+
+Going back to video games, this is why I feel that to create great horror games you need to have events that keep the player on their toes and more importantly are random in their occurrence. While the basic situation won’t change, by adding new threats or issues can release the tension and keep the player feeling scared.
+
+Another great reason to keep away from pure action or pure storytelling is that it lets you get away with having fewer but more dangerous enemies as opposed to having arena fights. Fighting nothing but weak enemies doesn’t really work in a horror setting as the player will eventually get used to fighting them.
+
+I really, really want to someday make my dream horror game as just the thought of it scares me and if something can scare me, I’m sure that it will do a lot worse to those who play it. The idea I have in mind is all about controlling tension and making sure that the player is always balancing between that state of being scared and being on edge. 
+
